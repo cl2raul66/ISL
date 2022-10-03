@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ISL.Vistas.PgAjustes"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:ISL.VistaModelos"
+    Title="Ajustes"
+    x:DataType="vm:PgAjustesVistaModelo">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding GuardarCommand}"
+            IconImageSource="document_save.png"
+            Order="Primary"
+            Priority="0"
+            Text="Guardar" />
+    </ContentPage.ToolbarItems>
+
+    <Grid RowDefinitions="*,auto">
+        <VerticalStackLayout
+            Grid.Row="0"
+            Margin="8,0"
+            Spacing="8">
+            <Grid
+                Margin="8"
+                RowDefinitions="auto,auto"
+                RowSpacing="4">
+                <Label
+                    Grid.Row="0"
+                    Style="{StaticResource HeaderCtrl}"
+                    Text="Nombre completo:" />
+                <Entry
+                    Grid.Row="1"
+                    Keyboard="Text"
+                    Placeholder="Requerido"
+                    Text="{Binding NombreUsuario, Mode=TwoWay}" />
+            </Grid>
+            <Line Style="{StaticResource Separador}" />
+            <Grid
+                Margin="8"
+                RowDefinitions="auto,auto,auto"
+                RowSpacing="8">
+                <Label
+                    Grid.Row="0"
+                    Style="{StaticResource HeaderCtrl}"
+                    Text="Firma digital:" />
+                <Frame
+                    Grid.Row="1"
+                    BackgroundColor="Transparent">
+                    <Image
+                        HeightRequest="200"
+                        WidthRequest="300" />
+                </Frame>
+                <Grid
+                    Grid.Row="2"
+                    ColumnDefinitions="*,*"
+                    ColumnSpacing="4">
+                    <Button
+                        Grid.Column="0"
+                        Text="Quitar" />
+                    <Button
+                        Grid.Column="1"
+                        Text="Agregar" />
+                </Grid>
+            </Grid>
+            <Line Style="{StaticResource Separador}" />
+        </VerticalStackLayout>
+        <Grid
+            Grid.Row="1"
+            Style="{StaticResource FooterBar}">
+            <Label
+                Style="{StaticResource Autor}"
+                Text="By RandA Media Lab, Group." />
+        </Grid>
+    </Grid>
+</ContentPage>

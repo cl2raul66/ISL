@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ISL.Vistas.PgPrincipal"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ctm="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:modelos="clr-namespace:ISL.Modelos"
+    xmlns:vm="clr-namespace:ISL.VistaModelos"
+    Title="Principal"
+    x:DataType="vm:PgPrincipalVistaModelo">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding GoToAgregarActividadCommand}"
+            IconImageSource="document_new.png"
+            Order="Primary"
+            Priority="0"
+            Text="Agregar tareas" />
+        <ToolbarItem
+            Command="{Binding GoToQrCodeCommand}"
+            Order="Secondary"
+            Text="Generar QR" />
+        <ToolbarItem
+            Command="{Binding GoToAjustesCommand}"
+            Order="Secondary"
+            Text="Ajustes" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate
+                x:Key="MensajeItemTemplate"
+                x:DataType="modelos:MensajeItem">
+                <Frame
+                    Margin="0,0,0,8"
+                    Padding="8"
+                    BackgroundColor="{Binding Tipo, Converter={StaticResource MensajeTipoToBacgrundColor}}"
+                    Style="{StaticResource FrameItem}">
+                    <Grid
+                        ColumnDefinitions="auto,*"
+                        ColumnSpacing="4">
+                        <Image
+                            Grid.Column="0"
+                            HeightRequest="28"
+                            Source="{Binding Tipo, Converter={StaticResource MensajeTipoToImagen}}" />
+                        <Label
+                            Grid.Column="1"
+                            LineBreakMode="CharacterWrap"
+                            Text="{Binding Mensaje}"
+                            VerticalOptions="CenterAndExpand" />
+                    </Grid>
+                </Frame>
+            </DataTemplate>
+            <DataTemplate
+                x:Key="SemanaItemTemplate"
+                x:DataType="modelos:SemanaItem">
+                <Frame
+                    Margin="0,0,0,8"
+                    Style="{StaticResource FrameItem}">
+                    <Grid
+                        ColumnDefinitions="50,*,auto"
+                        ColumnSpacing="8">
+                        <Frame
+                            Grid.Column="0"
+                            Style="{StaticResource FrameSemana}">
+                            <Label
+                                Style="{StaticResource LabelSemana}"
+                                Text="{Binding NombreDia, Mode=OneWay}" />
+                        </Frame>
+                        <Label
+                            Grid.Column="1"
+                            Style="{StaticResource LabelTextoItem}"
+                            Text="{Binding Texto, Mode=OneWay, TargetNullValue='12 Labores realizadas'}" />
+                        <Label
+                            Grid.Column="2"
+                            Style="{StaticResource LabelHorarioItem}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Horario.Item1, Mode=OneWay, TargetNullValue='07:00 AM'}" />
+                                    <Span Text=" &#10;" />
+                                    <Span Text="{Binding Horario.Item2, Mode=OneWay, TargetNullValue='05:00 PM'}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+                </Frame>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="auto,*,Auto, auto">
+        <VerticalStackLayout
+            Grid.Row="0"
+            Margin="8,0"
+            Spacing="8">
+            <CollectionView
+                ItemTemplate="{StaticResource MensajeItemTemplate}"
+                ItemsSource="{Binding Notificaciones}"
+                SelectionMode="None" />
+            <Label
+                IsVisible="{Binding NombreUsuario, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
+                Style="{StaticResource Informacion}"
+                Text="{Binding NombreUsuario, StringFormat='Usuario: {0}', Mode=OneWay}" />
+            <Label
+                IsVisible="{Binding NombreUsuario, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
+                Style="{StaticResource Informacion}"
+                Text="{Binding SemanaActual, Mode=OneWay}" />
+            <Label
+                IsVisible="{Binding NombreUsuario, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
+                Style="{StaticResource Informacion}"
+                Text="{Binding FechaHoy, StringFormat='Hoy es {0}', Mode=OneWay}" />
+            <Line Style="{StaticResource Separador}" />
+        </VerticalStackLayout>
+        <CollectionView
+            Grid.Row="1"
+            Margin="8,0"
+            IsVisible="true"
+            ItemTemplate="{DynamicResource SemanaItemTemplate}"
+            ItemsSource="{Binding CurrentSemana, Mode=OneWay}"
+            SelectionMode="Single" />
+        <VerticalStackLayout
+            Grid.Row="2"
+            Margin="8"
+            IsVisible="true"
+            Spacing="8">
+            <Line Style="{StaticResource Separador}" />
+            <Label Text="Establecer horario:" />
+            <Grid
+                ColumnDefinitions="*,*"
+                ColumnSpacing="8">
+                <Button
+                    Grid.Column="0"
+                    IsEnabled="False"
+                    Text="Entrada" />
+                <Button
+                    Grid.Column="1"
+                    Text="Salida" />
+            </Grid>
+        </VerticalStackLayout>
+        <Grid
+            Grid.Row="3"
+            Style="{StaticResource FooterBar}">
+            <Label
+                Style="{StaticResource Autor}"
+                Text="By RandA Media Lab, Group." />
+        </Grid>
+    </Grid>
+
+</ContentPage>

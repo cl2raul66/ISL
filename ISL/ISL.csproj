@@ -1,0 +1,98 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
+		<OutputType>Exe</OutputType>
+		<RootNamespace>ISL</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+
+		<!-- Display name -->
+		<ApplicationTitle>ISL</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>com.companyname.isl</ApplicationId>
+		<ApplicationIdGuid>3203451E-FF11-4AF1-B2B4-A171FF38450F</ApplicationIdGuid>
+
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">23.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- App Icon -->
+		<!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" />
+
+		<!-- Splash Screen -->
+		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />-->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" />
+
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+		<!--<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />-->
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<MauiImage Include="Resources\Images\dialog_error.svg" BaseSize="42,42" />
+		<MauiImage Include="Resources\Images\dialog_information.svg" BaseSize="42,42" />
+		<MauiImage Include="Resources\Images\dialog_question.svg" BaseSize="42,42" />
+		<MauiImage Include="Resources\Images\dialog_warning.svg" BaseSize="42,42" />
+
+		<MauiImage Include="Resources\Images\action_unavailable.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\applications_system.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\contact_new.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\document_edit.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\document_new.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\document_open.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\document_print.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\document_save_as.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\document_save.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\document_send.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\edit_copy.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\edit_cut.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\edit_find.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\edit_paste.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\help_about.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\image_x_generic.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\inode_directory.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\list_add.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\list_remove.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\object_select.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\process_stop.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\text_x_generic.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\view_conceal.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\view_refresh.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\view_reveal.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\x_office_calendar.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\x_office_document.svg" BaseSize="32,32" />
+		<MauiImage Include="Resources\Images\scanner.svg" BaseSize="32,32" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="1.3.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+		<PackageReference Include="LiteDB" Version="5.0.12" />
+		<PackageReference Include="QuestPDF" Version="2022.9.0" />
+		<PackageReference Include="ZXing.Net" Version="0.16.8" />
+		<PackageReference Include="ZXing.Net.Maui" Version="0.1.0-preview.7" />
+	</ItemGroup>
+
+</Project>
