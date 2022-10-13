@@ -3,12 +3,14 @@
     x:Class="ISL.Vistas.PgAjustes"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ctm="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:ISL.VistaModelos"
     Title="Ajustes"
     x:DataType="vm:PgAjustesVistaModelo">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem
+            x:Name="TBIGuardar"
             Command="{Binding GuardarCommand}"
             IconImageSource="document_save.png"
             Order="Primary"
@@ -31,6 +33,7 @@
                     Text="Nombre completo:" />
                 <Entry
                     Grid.Row="1"
+                    ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference TBIGuardar}"
                     Keyboard="Text"
                     Placeholder="Requerido"
                     Text="{Binding NombreUsuario, Mode=TwoWay}" />

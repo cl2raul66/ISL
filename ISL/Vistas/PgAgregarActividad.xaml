@@ -3,11 +3,77 @@
     x:Class="ISL.Vistas.PgAgregarActividad"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="PgAgregarActividad">
-    <VerticalStackLayout>
-        <Label
-            HorizontalOptions="Center"
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+    xmlns:ctm="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:ISL.VistaModelos"
+    Title="PgAgregarActividad"
+    BackgroundColor="Transparent"
+    Shell.PresentationMode="ModalAnimated">
+
+    <Frame
+        Margin="8"
+        BackgroundColor="{StaticResource Principal}"
+        VerticalOptions="End">
+        <VerticalStackLayout Spacing="8">
+            <Grid
+                Margin="8"
+                RowDefinitions="auto,auto"
+                RowSpacing="4">
+                <Label
+                    Grid.Row="0"
+                    Style="{StaticResource HeaderCtrl}"
+                    Text="Establecer horario:" />
+                <Grid
+                    Grid.Row="1"
+                    ColumnDefinitions="*,*"
+                    ColumnSpacing="8">
+                    <Grid
+                        Grid.Column="0"
+                        Margin="8"
+                        RowDefinitions="auto,auto"
+                        RowSpacing="4">
+                        <Label
+                            Grid.Row="0"
+                            Style="{StaticResource HeaderCtrl}"
+                            Text="Entrada:" />
+                        <Entry
+                            Grid.Row="1"
+                            ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference TBIGuardar}"
+                            Keyboard="Text"
+                            Text="{Binding NombreUsuario, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid
+                        Grid.Column="1"
+                        Margin="8"
+                        RowDefinitions="auto,auto"
+                        RowSpacing="4">
+                        <Label
+                            Grid.Row="0"
+                            Style="{StaticResource HeaderCtrl}"
+                            Text="Salida:" />
+                        <Entry
+                            Grid.Row="1"
+                            ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference TBIGuardar}"
+                            Keyboard="Text"
+                            Text="{Binding NombreUsuario, Mode=TwoWay}" />
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Line Style="{StaticResource Separador}" />
+            <Grid
+                Margin="8"
+                RowDefinitions="auto,auto"
+                RowSpacing="4">
+                <Label
+                    Grid.Row="0"
+                    Style="{StaticResource HeaderCtrl}"
+                    Text="Nombre completo:" />
+                <Entry
+                    Grid.Row="1"
+                    ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference TBIGuardar}"
+                    Keyboard="Text"
+                    Placeholder="Requerido"
+                    Text="{Binding NombreUsuario, Mode=TwoWay}" />
+            </Grid>
+        </VerticalStackLayout>
+    </Frame>
 </ContentPage>

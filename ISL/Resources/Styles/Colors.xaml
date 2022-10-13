@@ -8,7 +8,7 @@
     <Color x:Key="PrincipalBg">#B9595D</Color>
 
     <Color x:Key="Secundario">#FFFFFF</Color>
-    <Color x:Key="SecundarioBg">#eeFFFFFF</Color>
+    <Color x:Key="SecundarioBg">#bbFFFFFF</Color>
 
     <Color x:Key="Informacion">#90C418</Color>
     <Color x:Key="InformacionBg">#5590C418</Color>

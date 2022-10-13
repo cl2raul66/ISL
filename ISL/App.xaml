@@ -44,8 +44,21 @@
                 x:Key="FrameItem"
                 TargetType="Frame">
                 <Setter Property="BackgroundColor" Value="{StaticResource SecundarioBg}" />
+                <Setter Property="BorderColor" Value="{StaticResource SecundarioBg}" />
                 <Setter Property="CornerRadius" Value="4" />
                 <Setter Property="Padding" Value="2" />
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Secundario}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
             </Style>
             <Style
                 x:Key="HeaderCtrl"
@@ -67,6 +80,18 @@
                 <Setter Property="Margin" Value="0" />
                 <Setter Property="HeightRequest" Value="42" />
                 <Setter Property="WidthRequest" Value="42" />
+                <!--<Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Principal}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>-->
             </Style>
             <Style
                 x:Key="LabelSemana"
@@ -86,13 +111,38 @@
                 <Setter Property="FontSize" Value="Subtitle" />
                 <Setter Property="VerticalTextAlignment" Value="Center" />
                 <Setter Property="TextColor" Value="{StaticResource Principal}" />
+                <!--<Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Principal}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>-->
             </Style>
             <Style
                 x:Key="LabelHorarioItem"
                 TargetType="Label">
                 <Setter Property="FontSize" Value="Body" />
                 <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
                 <Setter Property="TextColor" Value="{StaticResource Principal}" />
+                <!--<Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Principal}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>-->
             </Style>
 
             <Style

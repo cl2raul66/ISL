@@ -8,7 +8,7 @@ public partial class PgPrincipal : ContentPage
     {
         InitializeComponent();
 
-        //BindingContext = MauiProgram.CreateMauiApp().Services.GetService<PgPrincipalVistaModelo>();
         BindingContext = vm;
     }
+
 }

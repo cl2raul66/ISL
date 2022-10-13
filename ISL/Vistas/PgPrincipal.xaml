@@ -4,15 +4,19 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:ctm="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:local="clr-namespace:ISL.Vistas"
     xmlns:modelos="clr-namespace:ISL.Modelos"
+    xmlns:utiles="clr-namespace:ISL.Utiles"
     xmlns:vm="clr-namespace:ISL.VistaModelos"
     Title="Principal"
-    x:DataType="vm:PgPrincipalVistaModelo">
+    x:DataType="vm:PgPrincipalVistaModelo"
+    Shell.NavBarHasShadow="true">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem
             Command="{Binding GoToAgregarActividadCommand}"
             IconImageSource="document_new.png"
+            IsEnabled="{Binding EnableAgregarActividad}"
             Order="Primary"
             Priority="0"
             Text="Agregar tareas" />
@@ -51,8 +55,51 @@
                     </Grid>
                 </Frame>
             </DataTemplate>
+
             <DataTemplate
-                x:Key="SemanaItemTemplate"
+                x:Key="SemanaItemValidos"
+                x:DataType="modelos:SemanaItem">
+                <Frame
+                    x:Name="FItem"
+                    Margin="0,0,0,8"
+                    Style="{StaticResource FrameItem}">
+                    <Grid
+                        ColumnDefinitions="50,*,auto"
+                        ColumnSpacing="8">
+                        <Frame
+                            x:Name="FSemana"
+                            Grid.Column="0"
+                            BackgroundColor="{StaticResource Principal}"
+                            Style="{StaticResource FrameSemana}">
+                            <Label
+                                x:Name="LSemana"
+                                Style="{StaticResource LabelSemana}"
+                                Text="{Binding NombreDia, Mode=OneWay}" />
+                        </Frame>
+                        <Label
+                            x:Name="LTextoItem"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelTextoItem}"
+                            Text="{Binding Texto, Mode=OneWay, TargetNullValue='No laborado'}"
+                            TextColor="{StaticResource Principal}" />
+                        <Label
+                            x:Name="LHorarioItem"
+                            Grid.Column="2"
+                            Style="{StaticResource LabelHorarioItem}"
+                            TextColor="{StaticResource Principal}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Horario.Item1, Mode=OneWay}" />
+                                    <Span Text=" &#10;" />
+                                    <Span Text="{Binding Horario.Item2, Mode=OneWay}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+                </Frame>
+            </DataTemplate>
+            <DataTemplate
+                x:Key="SemanaItemInvalidos"
                 x:DataType="modelos:SemanaItem">
                 <Frame
                     Margin="0,0,0,8"
@@ -61,17 +108,21 @@
                         ColumnDefinitions="50,*,auto"
                         ColumnSpacing="8">
                         <Frame
+                            x:Name="FSemana"
                             Grid.Column="0"
                             Style="{StaticResource FrameSemana}">
                             <Label
+                                x:Name="LSemana"
                                 Style="{StaticResource LabelSemana}"
                                 Text="{Binding NombreDia, Mode=OneWay}" />
                         </Frame>
                         <Label
+                            x:Name="LTextoItem"
                             Grid.Column="1"
                             Style="{StaticResource LabelTextoItem}"
-                            Text="{Binding Texto, Mode=OneWay, TargetNullValue='12 Labores realizadas'}" />
+                            Text="{Binding Texto, Mode=OneWay, TargetNullValue='No laborado'}" />
                         <Label
+                            x:Name="LHorarioItem"
                             Grid.Column="2"
                             Style="{StaticResource LabelHorarioItem}">
                             <Label.FormattedText>
@@ -85,6 +136,10 @@
                     </Grid>
                 </Frame>
             </DataTemplate>
+            <utiles:SemanaItemDataTemplateSelector
+                x:Key="SemanaItemDataTemplate"
+                InvalidTemplate="{StaticResource SemanaItemInvalidos}"
+                ValidTemplate="{StaticResource SemanaItemValidos}" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -113,11 +168,18 @@
         </VerticalStackLayout>
         <CollectionView
             Grid.Row="1"
-            Margin="8,0"
+            Margin="8"
             IsVisible="true"
-            ItemTemplate="{DynamicResource SemanaItemTemplate}"
+            ItemTemplate="{StaticResource SemanaItemDataTemplate}"
             ItemsSource="{Binding CurrentSemana, Mode=OneWay}"
-            SelectionMode="Single" />
+            SelectedItem="{Binding SelectedSemanaItem, Mode=TwoWay}"
+            SelectionMode="Single">
+            <!--<CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <local:CvSemanaItem />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>-->
+        </CollectionView>
         <VerticalStackLayout
             Grid.Row="2"
             Margin="8"
