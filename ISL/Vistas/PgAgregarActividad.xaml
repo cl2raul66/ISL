@@ -37,9 +37,7 @@
                             Text="Entrada:" />
                         <Entry
                             Grid.Row="1"
-                            ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference TBIGuardar}"
-                            Keyboard="Text"
-                            Text="{Binding NombreUsuario, Mode=TwoWay}" />
+                            Keyboard="Text" />
                     </Grid>
                     <Grid
                         Grid.Column="1"
@@ -52,9 +50,7 @@
                             Text="Salida:" />
                         <Entry
                             Grid.Row="1"
-                            ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference TBIGuardar}"
-                            Keyboard="Text"
-                            Text="{Binding NombreUsuario, Mode=TwoWay}" />
+                            Keyboard="Text" />
                     </Grid>
                 </Grid>
             </Grid>
@@ -69,10 +65,8 @@
                     Text="Nombre completo:" />
                 <Entry
                     Grid.Row="1"
-                    ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference TBIGuardar}"
                     Keyboard="Text"
-                    Placeholder="Requerido"
-                    Text="{Binding NombreUsuario, Mode=TwoWay}" />
+                    Placeholder="Requerido" />
             </Grid>
         </VerticalStackLayout>
     </Frame>

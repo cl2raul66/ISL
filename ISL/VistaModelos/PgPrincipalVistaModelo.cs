@@ -4,14 +4,8 @@ using ISL.Modelos;
 using ISL.Servicios;
 using ISL.Utiles.Enumeradores;
 using ISL.Vistas;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ISL.VistaModelos;
 
@@ -43,14 +37,14 @@ public partial class PgPrincipalVistaModelo : ObservableObject
         SemanaActual = $"Semana: {NoSemanaDelAnio} del {gc.AddDays(hoy, (int)dow == 0 ? -6 : (int)dow == 1 ? 0 : -1 * (int)dow).ToShortDateString()} al {gc.AddDays(hoy, (int)dow == 0 ? 0 : 7 - (int)dow).ToShortDateString()}";
         FechaHoy = hoy.ToString("D");
 
-        if (!EnableGoTo)
+        if (EnableGoTo)
         {
-            Notificaciones.Add(new("No hay usuario registrado, en Ajustes puede solucionar este problema.", MensajeTipo.Informacion));
+            SetCurrentSemana();
+            SelectedSemanaItem = CurrentSemana[(int)dow == 0 ? 6 : (int)dow - 1];
         }
         else
         {
-            SetCurrentSemana();
-            SelectedSemanaItem = CurrentSemana[(int)dow == 0 ? 6 : (int)dow == 6 ? 0 : (int)dow - 1];
+            ComprobarNombreUsuario();
         }
 
         if (!TransitoriaBd.ExisteBd)
@@ -67,10 +61,11 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     private SemanaItem selectedSemanaItem;
 
     [ObservableProperty]
-    private List<MensajeItem> notificaciones = new();
+    private ObservableCollection<MensajeItem> notificaciones = new();
 
     [ObservableProperty]
-    private string nombreUsuario = string.Empty;
+    [NotifyCanExecuteChangedFor(nameof(ComprobarNombreUsuarioCommand))]
+    private string nombreUsuario;
 
     [ObservableProperty]
     private string fechaHoy = string.Empty;
@@ -86,12 +81,12 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     {
         if (EnableGoTo)
         {
-            await Shell.Current.GoToAsync(nameof(PgQrCode));
+            await Shell.Current.GoToAsync(nameof(PgQrCode),true);
         }
     }
 
     [RelayCommand]
-    private Task GoToAjustes() => Shell.Current.GoToAsync($"{nameof(PgAjustes)}?NombreUsuario={NombreUsuario}");
+    private Task GoToAjustes() => Shell.Current.GoToAsync(nameof(PgAjustes),true);
 
     [RelayCommand(CanExecute = nameof(EnableAgregarActividad))]
     public async Task GoToAgregarActividad()
@@ -127,6 +122,17 @@ public partial class PgPrincipalVistaModelo : ObservableObject
                 new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Sunday)},
             };
         }
-
     }
+
+    #region extra
+    [RelayCommand]
+    public async Task ComprobarNombreUsuario()
+    {
+        if (!EnableGoTo)
+        {
+            Notificaciones.Add(new("No hay usuario registrado, en Ajustes puede solucionar este problema.", MensajeTipo.Informacion));
+        }
+        await Task.CompletedTask;
+    }
+    #endregion
 }

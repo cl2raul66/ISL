@@ -23,6 +23,15 @@
             <cvt:MensajeTipoToBacgrundColorConverter x:Key="MensajeTipoToBacgrundColor" />
             <cvt:StringToInitials2Converter x:Key="StringToInitials2" />
 
+            <Style TargetType="TextCell">
+                <Setter Property="TextColor" Value="{StaticResource Secundario}" />
+                <Setter Property="DetailColor" Value="{StaticResource SecundarioBg}" />
+            </Style>
+
+            <Style TargetType="TableSection">
+                <Setter Property="Title" Value="{StaticResource Secundario}" />
+            </Style>
+
             <Style
                 x:Key="Informacion"
                 TargetType="Label">

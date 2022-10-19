@@ -16,4 +16,16 @@ public partial class PgAjustes : ContentPage
     {
         base.OnNavigatedTo(args);
     }
+
+    protected override bool OnBackButtonPressed()
+    {
+        return base.OnBackButtonPressed();
+    }
+
+    private void SwitchCell_Disappearing(object sender, EventArgs e)
+    {
+
+    }
+
+    //override 
 }

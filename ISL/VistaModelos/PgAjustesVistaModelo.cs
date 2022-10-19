@@ -3,18 +3,10 @@ using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ISL.Vistas;
-using Microsoft.Maui;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ISL.VistaModelos;
 
-[QueryProperty(nameof(NombreUsuario), nameof(NombreUsuario))]
+//[QueryProperty(nameof(NombreUsuario), nameof(NombreUsuario))]
 public partial class PgAjustesVistaModelo : ObservableObject
 {
     //public PgAjustesVistaModelo()
@@ -35,9 +27,14 @@ public partial class PgAjustesVistaModelo : ObservableObject
         {
             Preferences.Set(nameof(NombreUsuario), NombreUsuario);
             var comprobar = Preferences.Get(nameof(NombreUsuario), string.Empty);
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationTokenSource cancellationTokenSource = new();
             var toast = Toast.Make(string.IsNullOrEmpty(comprobar) ? "No se pudo guardar los datos" : "Se guardo con éxito.",ToastDuration.Short, 14);
             await toast.Show(cancellationTokenSource.Token);
         }
     }
+
+    [RelayCommand]
+    private Task SetModNC() => Shell.Current.GoToAsync(nameof(PgModNC), true);
+    [RelayCommand]
+    private Task SendBack() => Shell.Current.GoToAsync("..", true);
 }

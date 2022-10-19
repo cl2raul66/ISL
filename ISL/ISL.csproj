@@ -95,4 +95,10 @@
 		<PackageReference Include="ZXing.Net.Maui" Version="0.1.0-preview.7" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiXaml Update="Vistas\PgModNC.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

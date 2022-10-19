@@ -17,8 +17,9 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<ILocalBdServicio, LocalBdServicio>();
         builder.Services.AddSingleton<ITransitoriaBdServicio, TransitoriaBdServicio>();
-        builder.Services.AddSingleton<PgPrincipalVistaModelo>();
+        builder.Services.AddTransient<PgPrincipalVistaModelo>();
         builder.Services.AddTransient<PgAjustesVistaModelo>();
+        builder.Services.AddTransient<PgModNCVistaModelo>();
 
         builder.UseBarcodeReader();
         builder.ConfigureFonts(fonts =>
@@ -26,8 +27,9 @@ public static class MauiProgram
             fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
         });
-        builder.Services.AddSingleton<PgPrincipal>();
+        builder.Services.AddTransient<PgPrincipal>();
         builder.Services.AddTransient<PgAjustes>();
+        builder.Services.AddTransient<PgModNC>();
 
         return builder.Build();
 	}

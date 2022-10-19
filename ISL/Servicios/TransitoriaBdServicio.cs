@@ -27,9 +27,9 @@ public class TransitoriaBdServicio : ITransitoriaBdServicio
         };
 
         LiteDatabase db = new(cnx);
-
-        ExisteBd = db.CollectionExists(nameof(Expediente));
+                
         collection = db.GetCollection<Expediente>();
+        ExisteBd = collection.LongCount() > 0;
         collection.EnsureIndex(x => x.NoSemana);
     }
 

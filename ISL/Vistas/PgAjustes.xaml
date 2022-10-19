@@ -8,7 +8,7 @@
     Title="Ajustes"
     x:DataType="vm:PgAjustesVistaModelo">
 
-    <ContentPage.ToolbarItems>
+    <!--<ContentPage.ToolbarItems>
         <ToolbarItem
             x:Name="TBIGuardar"
             Command="{Binding GuardarCommand}"
@@ -16,10 +16,33 @@
             Order="Primary"
             Priority="0"
             Text="Guardar" />
-    </ContentPage.ToolbarItems>
+    </ContentPage.ToolbarItems>-->
 
     <Grid RowDefinitions="*,auto">
-        <VerticalStackLayout
+        <TableView
+            Grid.Row="0"
+            Intent="Settings">
+            <TableRoot>
+                <TableSection
+                    Title="Datos personales"
+                    TextColor="{StaticResource Secundario}">
+                    <TextCell
+                        Command="{Binding SetModNCCommand}"
+                        Detail="Estado: Establecido, toque para modificar"
+                        DetailColor="{StaticResource SecundarioBg}"
+                        Text="Nombre completo"
+                        TextColor="{StaticResource Secundario}" />
+                    <TextCell
+                        Command="{Binding SendBackCommand}"
+                        Detail="Estado: Sin establer, toque para modificar"
+                        DetailColor="{StaticResource SecundarioBg}"
+                        Text="Firma digital"
+                        TextColor="{StaticResource Secundario}" />
+                </TableSection>
+            </TableRoot>
+        </TableView>
+
+        <!--<VerticalStackLayout
             Grid.Row="0"
             Margin="8,0"
             Spacing="8">
@@ -31,12 +54,18 @@
                     Grid.Row="0"
                     Style="{StaticResource HeaderCtrl}"
                     Text="Nombre completo:" />
-                <Entry
+                <Frame
                     Grid.Row="1"
-                    ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference TBIGuardar}"
-                    Keyboard="Text"
-                    Placeholder="Requerido"
-                    Text="{Binding NombreUsuario, Mode=TwoWay}" />
+                    Margin="0"
+                    Padding="8,2"
+                    BackgroundColor="Transparent"
+                    BorderColor="{StaticResource PrincipalBg}"
+                    CornerRadius="4">
+                    <Entry
+                        ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference TBIGuardar}"
+                        Placeholder="Requerido"
+                        Text="{Binding NombreUsuario, Mode=TwoWay}" />
+                </Frame>
             </Grid>
             <Line Style="{StaticResource Separador}" />
             <Grid
@@ -67,7 +96,7 @@
                 </Grid>
             </Grid>
             <Line Style="{StaticResource Separador}" />
-        </VerticalStackLayout>
+        </VerticalStackLayout>-->
         <Grid
             Grid.Row="1"
             Style="{StaticResource FooterBar}">
