@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ISL.Vistas;
 
 namespace ISL.VistaModelos
 {
@@ -17,7 +16,8 @@ namespace ISL.VistaModelos
         {
             if (EnableGuardar)
             {
-                Preferences.Set(nameof(NombreUsuario), NombreUsuario);
+                Preferences.Set(nameof(NombreUsuario), NombreUsuario.TrimEnd());
+                await Cancelar();
             }
             await Task.CompletedTask;
         }
@@ -25,10 +25,10 @@ namespace ISL.VistaModelos
         [RelayCommand]
         private async Task Cancelar()
         {
-            string OriginalString = Shell.Current.CurrentState.Location.OriginalString;
-            int index = OriginalString.LastIndexOf('/');
-            string Location = OriginalString[..index];
-            await Shell.Current.GoToAsync(Location);
+            string locationShell = Shell.Current.CurrentState.Location.OriginalString;
+            int indexLocationShell = locationShell.LastIndexOf('/');
+            string Location = locationShell[..indexLocationShell];
+            await Shell.Current.GoToAsync($"{Location}?{nameof(NombreUsuario)}={NombreUsuario}", false);
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Globalization;
 
 namespace ISL.VistaModelos;
 
+[QueryProperty(nameof(NombreUsuario), nameof(NombreUsuario))]
 public partial class PgPrincipalVistaModelo : ObservableObject
 {
     private readonly ITransitoriaBdServicio TransitoriaBd = MauiProgram.CreateMauiApp().Services.GetService<ITransitoriaBdServicio>();
@@ -42,14 +43,10 @@ public partial class PgPrincipalVistaModelo : ObservableObject
             SetCurrentSemana();
             SelectedSemanaItem = CurrentSemana[(int)dow == 0 ? 6 : (int)dow - 1];
         }
-        else
-        {
-            ComprobarNombreUsuario();
-        }
 
         if (!TransitoriaBd.ExisteBd)
         {
-            Notificaciones.Add(new("No existen datos, en Ajustes configure los requeridos.", MensajeTipo.Informacion));
+            Notificaciones.Add(new(0, "No existen datos, en Ajustes configure los requeridos.", MensajeTipo.Informacion));
         }
     }
 
@@ -63,9 +60,18 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     [ObservableProperty]
     private ObservableCollection<MensajeItem> notificaciones = new();
 
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(ComprobarNombreUsuarioCommand))]
     private string nombreUsuario;
+    public string NombreUsuario
+    {
+        get => nombreUsuario;
+        set
+        {
+            if (SetProperty(ref nombreUsuario, value))
+            {
+                ComprobarNombreUsuario();
+            }
+        }
+    }
 
     [ObservableProperty]
     private string fechaHoy = string.Empty;
@@ -81,12 +87,12 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     {
         if (EnableGoTo)
         {
-            await Shell.Current.GoToAsync(nameof(PgQrCode),true);
+            await Shell.Current.GoToAsync(nameof(PgQrCode), true);
         }
     }
 
     [RelayCommand]
-    private Task GoToAjustes() => Shell.Current.GoToAsync(nameof(PgAjustes),true);
+    private async Task GoToAjustes() => await Shell.Current.GoToAsync(nameof(PgAjustes), true, new Dictionary<string, object>() { { nameof(NombreUsuario), NombreUsuario } });
 
     [RelayCommand(CanExecute = nameof(EnableAgregarActividad))]
     public async Task GoToAgregarActividad()
@@ -125,14 +131,17 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     }
 
     #region extra
-    [RelayCommand]
-    public async Task ComprobarNombreUsuario()
+    private void ComprobarNombreUsuario()
     {
         if (!EnableGoTo)
         {
-            Notificaciones.Add(new("No hay usuario registrado, en Ajustes puede solucionar este problema.", MensajeTipo.Informacion));
+            Notificaciones.Add(new(1, "No hay usuario registrado, en Ajustes puede solucionar este problema.", MensajeTipo.Informacion));
         }
-        await Task.CompletedTask;
+        else if (Notificaciones.Any())
+        {
+            var msg = Notificaciones.FirstOrDefault(x => x.Id == 1);
+            Notificaciones.Remove(msg);
+        }
     }
     #endregion
 }

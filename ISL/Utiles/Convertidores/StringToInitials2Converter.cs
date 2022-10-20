@@ -6,7 +6,7 @@ namespace ISL.Utiles.Convertidores
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string? valueString = value as string;
+            string valueString = value as string;
             return !string.IsNullOrEmpty(valueString) ? valueString[..2] : string.Empty;
         }
 

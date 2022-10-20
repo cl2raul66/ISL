@@ -8,15 +8,9 @@
     Title="Ajustes"
     x:DataType="vm:PgAjustesVistaModelo">
 
-    <!--<ContentPage.ToolbarItems>
-        <ToolbarItem
-            x:Name="TBIGuardar"
-            Command="{Binding GuardarCommand}"
-            IconImageSource="document_save.png"
-            Order="Primary"
-            Priority="0"
-            Text="Guardar" />
-    </ContentPage.ToolbarItems>-->
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding RegresarCommand}" />
+    </Shell.BackButtonBehavior>
 
     <Grid RowDefinitions="*,auto">
         <TableView
@@ -28,16 +22,15 @@
                     TextColor="{StaticResource Secundario}">
                     <TextCell
                         Command="{Binding SetModNCCommand}"
-                        Detail="Estado: Establecido, toque para modificar"
+                        Detail="{Binding EstadoNombreUsuario, Mode=OneWay, StringFormat='Estado: {0}, toque para modificar'}"
                         DetailColor="{StaticResource SecundarioBg}"
                         Text="Nombre completo"
                         TextColor="{StaticResource Secundario}" />
-                    <TextCell
-                        Command="{Binding SendBackCommand}"
+                    <!--<TextCell
                         Detail="Estado: Sin establer, toque para modificar"
                         DetailColor="{StaticResource SecundarioBg}"
                         Text="Firma digital"
-                        TextColor="{StaticResource Secundario}" />
+                        TextColor="{StaticResource Secundario}" />-->
                 </TableSection>
             </TableRoot>
         </TableView>
@@ -46,28 +39,6 @@
             Grid.Row="0"
             Margin="8,0"
             Spacing="8">
-            <Grid
-                Margin="8"
-                RowDefinitions="auto,auto"
-                RowSpacing="4">
-                <Label
-                    Grid.Row="0"
-                    Style="{StaticResource HeaderCtrl}"
-                    Text="Nombre completo:" />
-                <Frame
-                    Grid.Row="1"
-                    Margin="0"
-                    Padding="8,2"
-                    BackgroundColor="Transparent"
-                    BorderColor="{StaticResource PrincipalBg}"
-                    CornerRadius="4">
-                    <Entry
-                        ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference TBIGuardar}"
-                        Placeholder="Requerido"
-                        Text="{Binding NombreUsuario, Mode=TwoWay}" />
-                </Frame>
-            </Grid>
-            <Line Style="{StaticResource Separador}" />
             <Grid
                 Margin="8"
                 RowDefinitions="auto,auto,auto"

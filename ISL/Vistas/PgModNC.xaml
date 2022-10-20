@@ -3,12 +3,17 @@
     x:Class="ISL.Vistas.PgModNC"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
     xmlns:ctm="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:ISL.VistaModelos"
     Title="Modificar - Nombre Completo"
     x:DataType="vm:PgModNCVistaModelo"
     BackgroundColor="Transparent"
     Shell.PresentationMode="ModalAnimated">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding CancelarCommand}" />
+    </Shell.BackButtonBehavior>
 
     <Frame
         Margin="8"
@@ -35,7 +40,14 @@
                     BorderColor="{StaticResource SecundarioBg}"
                     CornerRadius="4">
                     <Entry
+                        x:Name="EnNombreUsuario"
+                        android:Entry.ImeOptions="Done"
+                        ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference BtnGuardar}"
+                        ClearButtonVisibility="WhileEditing"
+                        IsSpellCheckEnabled="True"
+                        Keyboard="Text"
                         Placeholder="Requerido"
+                        ReturnCommand="{Binding GuardarCommand}"
                         Text="{Binding NombreUsuario, Mode=TwoWay}" />
                 </Frame>
             </Grid>
@@ -47,6 +59,7 @@
                     Command="{Binding CancelarCommand}"
                     Text="Cancelar" />
                 <Button
+                    x:Name="BtnGuardar"
                     Grid.Column="1"
                     Command="{Binding GuardarCommand}"
                     IsEnabled="{Binding EnableGuardar, Mode=OneWay}"

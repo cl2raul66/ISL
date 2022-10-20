@@ -9,5 +9,6 @@ public partial class PgModNC : ContentPage
 		InitializeComponent();
 
 		BindingContext = vm;
+		EnNombreUsuario.Focus();
 	}
 }

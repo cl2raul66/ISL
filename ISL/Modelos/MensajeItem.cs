@@ -2,4 +2,4 @@
 
 namespace ISL.Modelos;
 
-public record MensajeItem(string Mensaje, MensajeTipo Tipo){}
+public record MensajeItem(int Id, string Mensaje, MensajeTipo Tipo){}
