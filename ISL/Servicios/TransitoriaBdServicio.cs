@@ -6,6 +6,7 @@ namespace ISL.Servicios;
 public interface ITransitoriaBdServicio
 {
     bool ExisteBd { get; }
+    bool ExisteDatos { get; }
     IEnumerable<Expediente> GetAllExpediente { get; }
 
     Dictionary<string, ActividadDiaria> GetLaboresFromExpediente(int noSemana);
@@ -27,13 +28,16 @@ public class TransitoriaBdServicio : ITransitoriaBdServicio
         };
 
         LiteDatabase db = new(cnx);
-                
+
         collection = db.GetCollection<Expediente>();
-        ExisteBd = collection.LongCount() > 0;
+        ExisteBd = db.CollectionExists(nameof(Expediente));
+        ExisteDatos = collection.LongCount() > 0;
         collection.EnsureIndex(x => x.NoSemana);
     }
 
     public bool ExisteBd { private set; get; }
+
+    public bool ExisteDatos { private set; get; }
 
     public IEnumerable<Expediente> GetAllExpediente => collection.FindAll().Reverse();
 

@@ -6,13 +6,17 @@
     xmlns:ctm="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:ISL.VistaModelos"
     Title="PgAgregarActividad"
-    BackgroundColor="Transparent"
+    BackgroundColor="#aa121212"
     Shell.PresentationMode="ModalAnimated">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding CancelarCommand}" />
+    </Shell.BackButtonBehavior>
 
     <Frame
         Margin="8"
-        BackgroundColor="{StaticResource Principal}"
-        VerticalOptions="End">
+        BackgroundColor="{StaticResource PrincipalBg}"
+        VerticalOptions="Center">
         <VerticalStackLayout Spacing="8">
             <Grid
                 Margin="8"
@@ -35,9 +39,15 @@
                             Grid.Row="0"
                             Style="{StaticResource HeaderCtrl}"
                             Text="Entrada:" />
-                        <Entry
+                        <Frame
                             Grid.Row="1"
-                            Keyboard="Text" />
+                            Margin="0"
+                            Padding="8,2"
+                            BackgroundColor="Transparent"
+                            BorderColor="{StaticResource SecundarioBg}"
+                            CornerRadius="4">
+                            <TimePicker />
+                        </Frame>
                     </Grid>
                     <Grid
                         Grid.Column="1"
@@ -48,9 +58,15 @@
                             Grid.Row="0"
                             Style="{StaticResource HeaderCtrl}"
                             Text="Salida:" />
-                        <Entry
+                        <Frame
                             Grid.Row="1"
-                            Keyboard="Text" />
+                            Margin="0"
+                            Padding="8,2"
+                            BackgroundColor="Transparent"
+                            BorderColor="{StaticResource SecundarioBg}"
+                            CornerRadius="4">
+                            <TimePicker />
+                        </Frame>
                     </Grid>
                 </Grid>
             </Grid>
@@ -62,11 +78,36 @@
                 <Label
                     Grid.Row="0"
                     Style="{StaticResource HeaderCtrl}"
-                    Text="Nombre completo:" />
-                <Entry
+                    Text="Actividad:" />
+                <Frame
                     Grid.Row="1"
-                    Keyboard="Text"
-                    Placeholder="Requerido" />
+                    Margin="0"
+                    Padding="8,2"
+                    BackgroundColor="Transparent"
+                    BorderColor="{StaticResource SecundarioBg}"
+                    CornerRadius="4">
+                    <Entry
+                        ClearButtonVisibility="WhileEditing"
+                        HeightRequest="75"
+                        IsSpellCheckEnabled="True"
+                        Keyboard="Text"
+                        Placeholder="Requerido"
+                        VerticalTextAlignment="Start" />
+                </Frame>
+            </Grid>
+            <Grid
+                ColumnDefinitions="*,*"
+                ColumnSpacing="8">
+                <Button
+                    Grid.Column="0"
+                    Command="{Binding CancelarCommand}"
+                    Text="Cancelar" />
+                <Button
+                    x:Name="BtnGuardar"
+                    Grid.Column="1"
+                    Command="{Binding GuardarCommand}"
+                    IsEnabled="{Binding EnableGuardar, Mode=OneWay}"
+                    Text="Guardar" />
             </Grid>
         </VerticalStackLayout>
     </Frame>

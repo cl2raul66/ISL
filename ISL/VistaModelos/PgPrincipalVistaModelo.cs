@@ -4,6 +4,7 @@ using ISL.Modelos;
 using ISL.Servicios;
 using ISL.Utiles.Enumeradores;
 using ISL.Vistas;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
 using System.Collections.ObjectModel;
 using System.Globalization;
 
@@ -34,19 +35,23 @@ public partial class PgPrincipalVistaModelo : ObservableObject
         dow = hoy.DayOfWeek;
         NoSemanaDelAnio = gc.GetWeekOfYear(hoy, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
 
-        NombreUsuario = Preferences.Get(nameof(NombreUsuario), string.Empty);
         SemanaActual = $"Semana: {NoSemanaDelAnio} del {gc.AddDays(hoy, (int)dow == 0 ? -6 : (int)dow == 1 ? 0 : -1 * (int)dow).ToShortDateString()} al {gc.AddDays(hoy, (int)dow == 0 ? 0 : 7 - (int)dow).ToShortDateString()}";
         FechaHoy = hoy.ToString("D");
 
-        if (EnableGoTo)
+        NombreUsuario = Preferences.Get(nameof(NombreUsuario), string.Empty);
+        if (!TransitoriaBd.ExisteDatos && !EnableGoTo)
         {
-            SetCurrentSemana();
-            SelectedSemanaItem = CurrentSemana[(int)dow == 0 ? 6 : (int)dow - 1];
+            Notificaciones.Add(new(0, "Sea bienvenido a Informe Semanal de Labores (ISL), ingrese los datos requeridos para poder usar esta aplicación. Gracias.", MensajeTipo.Informacion));
         }
 
-        if (!TransitoriaBd.ExisteBd)
+        if (!TransitoriaBd.ExisteDatos)
         {
-            Notificaciones.Add(new(0, "No existen datos, en Ajustes configure los requeridos.", MensajeTipo.Informacion));
+            Notificaciones.Add(new(1, "No existen datos, en Ajustes configure los requeridos.", MensajeTipo.Precaucion));
+        }
+
+        if (!string.IsNullOrEmpty(NombreUsuario))
+        {
+            SetCurrentSemana();
         }
     }
 
@@ -69,6 +74,11 @@ public partial class PgPrincipalVistaModelo : ObservableObject
             if (SetProperty(ref nombreUsuario, value))
             {
                 ComprobarNombreUsuario();
+                if (string.IsNullOrEmpty(value))
+                {
+                    NombreUsuario = Preferences.Get(nameof(NombreUsuario), string.Empty);
+                }
+
             }
         }
     }
@@ -103,6 +113,30 @@ public partial class PgPrincipalVistaModelo : ObservableObject
         }
     }
 
+    [RelayCommand]
+    public Task VerObciones(string page) => page switch
+    {
+        "PgQrCode" => GoToQrCode(),
+        "PgAjustes" => GoToAjustes(),
+        _ => Task.CompletedTask
+    };
+
+    [RelayCommand]
+    private async Task CompartirPlantillaManual()
+    {
+        var fileCache = Path.Combine(FileSystem.Current.CacheDirectory, "Modelo_ISL.docx");
+        var doc = await FileSystem.Current.OpenAppPackageFileAsync("Plantilla_ISL_Manual.docx");
+        FileStream fs = File.OpenWrite(fileCache);
+        await doc.CopyToAsync(fs);
+        fs.Close();
+
+        await Share.Default.RequestAsync(new ShareFileRequest
+        {
+            Title = "Modelo ISL",
+            File = new ShareFile(fileCache)
+        });
+    }
+
     private void SetCurrentSemana()
     {
         var datos = TransitoriaBd.GetLaboresFromExpediente(NoSemanaDelAnio);
@@ -128,6 +162,8 @@ public partial class PgPrincipalVistaModelo : ObservableObject
                 new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Sunday)},
             };
         }
+
+        SelectedSemanaItem = CurrentSemana[(int)dow == 0 ? 6 : (int)dow - 1];
     }
 
     #region extra
@@ -135,12 +171,13 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     {
         if (!EnableGoTo)
         {
-            Notificaciones.Add(new(1, "No hay usuario registrado, en Ajustes puede solucionar este problema.", MensajeTipo.Informacion));
+            Notificaciones.Add(new(2, "No hay usuario registrado, en Ajustes puede solucionar este problema.", MensajeTipo.Precaucion));
         }
         else if (Notificaciones.Any())
         {
-            var msg = Notificaciones.FirstOrDefault(x => x.Id == 1);
+            var msg = Notificaciones.FirstOrDefault(x => x.Id == 2);
             Notificaciones.Remove(msg);
+            SetCurrentSemana();
         }
     }
     #endregion

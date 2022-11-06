@@ -10,13 +10,16 @@
     xmlns:vm="clr-namespace:ISL.VistaModelos"
     Title="Principal"
     x:DataType="vm:PgPrincipalVistaModelo"
-    Shell.NavBarHasShadow="true">
+    Shell.NavBarIsVisible="False">
 
-    <ContentPage.ToolbarItems>
+    <!--<Shell.MenuItemTemplate>
+
+    </Shell.MenuItemTemplate>-->
+
+    <!--<ContentPage.ToolbarItems>
         <ToolbarItem
             Command="{Binding GoToAgregarActividadCommand}"
             IconImageSource="document_new.png"
-            IsEnabled="{Binding EnableAgregarActividad}"
             Order="Primary"
             Priority="0"
             Text="Agregar tareas" />
@@ -28,7 +31,7 @@
             Command="{Binding GoToAjustesCommand}"
             Order="Secondary"
             Text="Ajustes" />
-    </ContentPage.ToolbarItems>
+    </ContentPage.ToolbarItems>-->
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -143,9 +146,39 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="auto,*,Auto, auto">
-        <VerticalStackLayout
+    <Grid RowDefinitions="auto,auto,*,Auto, auto">
+        <HorizontalStackLayout
             Grid.Row="0"
+            Padding="8"
+            HorizontalOptions="EndAndExpand"
+            Spacing="4">
+            <ImageButton
+                x:Name="ImgBtnNuevo"
+                Padding="4"
+                Aspect="Center"
+                Command="{Binding GoToAgregarActividadCommand}"
+                HeightRequest="42"
+                Source="document_new.png"
+                WidthRequest="42" />
+            <ImageButton
+                x:Name="ImgBtnModelo"
+                Padding="4"
+                Aspect="Center"
+                Command="{Binding CompartirPlantillaManualCommand}"
+                HeightRequest="42"
+                Source="document_send.png"
+                WidthRequest="42" />
+            <ImageButton
+                x:Name="ImgBtnMas"
+                Padding="0,4"
+                Aspect="Center"
+                Clicked="ImgBtnMas_Clicked"
+                HeightRequest="42"
+                Source="list_drag_handle.png"
+                WidthRequest="42" />
+        </HorizontalStackLayout>
+        <VerticalStackLayout
+            Grid.Row="1"
             Margin="8,0"
             Spacing="8">
             <CollectionView
@@ -167,23 +200,16 @@
             <Line Style="{StaticResource Separador}" />
         </VerticalStackLayout>
         <CollectionView
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="8"
-            IsVisible="true"
             ItemTemplate="{StaticResource SemanaItemDataTemplate}"
             ItemsSource="{Binding CurrentSemana, Mode=OneWay}"
             SelectedItem="{Binding SelectedSemanaItem, Mode=TwoWay}"
-            SelectionMode="Single">
-            <!--<CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <local:CvSemanaItem />
-                </DataTemplate>
-            </CollectionView.ItemTemplate>-->
-        </CollectionView>
+            SelectionMode="Single" />
         <VerticalStackLayout
-            Grid.Row="2"
+            Grid.Row="3"
             Margin="8"
-            IsVisible="true"
+            IsVisible="false"
             Spacing="8">
             <Line Style="{StaticResource Separador}" />
             <Label Text="Establecer horario:" />
@@ -200,7 +226,7 @@
             </Grid>
         </VerticalStackLayout>
         <Grid
-            Grid.Row="3"
+            Grid.Row="4"
             Style="{StaticResource FooterBar}">
             <Label
                 Style="{StaticResource Autor}"

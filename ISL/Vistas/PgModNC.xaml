@@ -8,7 +8,7 @@
     xmlns:vm="clr-namespace:ISL.VistaModelos"
     Title="Modificar - Nombre Completo"
     x:DataType="vm:PgModNCVistaModelo"
-    BackgroundColor="Transparent"
+    BackgroundColor="#aa121212"
     Shell.PresentationMode="ModalAnimated">
 
     <Shell.BackButtonBehavior>

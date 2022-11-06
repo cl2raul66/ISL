@@ -11,7 +11,17 @@ public partial class PgAjustesVistaModelo : ObservableObject
     [NotifyPropertyChangedFor(nameof(EstadoNombreUsuario))]
     private string nombreUsuario;
 
-    public string EstadoNombreUsuario => string.IsNullOrEmpty(NombreUsuario) ? "Sin establecer" : "Establecido";
+    public string EstadoNombreUsuario
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(NombreUsuario) || Preferences.Get(nameof(NombreUsuario), string.Empty) is not null)
+            {
+                return "Establecido";
+            }
+            return "Sin establecer";
+        }
+    }
 
     [RelayCommand]
     private async Task SetModNC() => await Shell.Current.GoToAsync(nameof(PgModNC), true);
@@ -21,4 +31,6 @@ public partial class PgAjustesVistaModelo : ObservableObject
     {
         await Shell.Current.GoToAsync($"..?{nameof(NombreUsuario)}={NombreUsuario}", true);
     }
+
+
 }

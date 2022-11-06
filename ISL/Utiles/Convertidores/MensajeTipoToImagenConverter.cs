@@ -20,7 +20,7 @@ public class MensajeTipoToImagenConverter : IValueConverter
                 resul = "dialog_warning.png";
                 break;
             case MensajeTipo.Informacion:
-                resul = "dialog_warning.png";
+                resul = "dialog_information.png";
                 break;
         }
 

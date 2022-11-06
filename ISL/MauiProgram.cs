@@ -3,6 +3,7 @@ using ISL.Servicios;
 using ISL.VistaModelos;
 using ISL.Vistas;
 using ZXing.Net.Maui;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
 
 namespace ISL;
 
