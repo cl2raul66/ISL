@@ -5,21 +5,59 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:ctm="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:ISL.VistaModelos"
-    Title="PgAgregarActividad"
-    BackgroundColor="#aa121212"
-    Shell.PresentationMode="ModalAnimated">
+    Title="Agregar actividad"
+    x:DataType="vm:PgAgregarActividadVistaModelo"
+    Shell.NavBarIsVisible="False">
 
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding CancelarCommand}" />
     </Shell.BackButtonBehavior>
 
-    <Frame
-        Margin="8"
-        BackgroundColor="{StaticResource PrincipalBg}"
-        VerticalOptions="Center">
-        <VerticalStackLayout Spacing="8">
+    <Grid RowDefinitions="auto,*,auto">
+        <Grid
+            Grid.Row="0"
+            ColumnDefinitions="auto,*">
+            <Label
+                Grid.Column="0"
+                Padding="8,0"
+                FontSize="Title"
+                Text="Agregar actividad"
+                VerticalOptions="Center" />
+            <HorizontalStackLayout
+                Grid.Column="1"
+                Padding="8"
+                HorizontalOptions="EndAndExpand"
+                Spacing="4">
+                <ImageButton
+                    Padding="4"
+                    Aspect="Center"
+                    Command="{Binding GuardarCommand}"
+                    HeightRequest="42"
+                    Source="list_add.png"
+                    WidthRequest="42" />
+                <ImageButton
+                    Padding="4"
+                    Aspect="Center"
+                    HeightRequest="42"
+                    IsEnabled="False"
+                    Source="list_remove.png"
+                    WidthRequest="42" />
+                <!--<ImageButton
+                    x:Name="ImgBtnMas"
+                    Padding="0,4"
+                    Aspect="Center"
+                    HeightRequest="42"
+                    Source="list_drag_handle.png"
+                    WidthRequest="42" />-->
+            </HorizontalStackLayout>
+        </Grid>
+        <VerticalStackLayout
+            Grid.Row="1"
+            Padding="8"
+            Spacing="8">
             <Grid
                 Margin="8"
+                IsVisible="{Binding TieneHorario}"
                 RowDefinitions="auto,auto"
                 RowSpacing="4">
                 <Label
@@ -70,7 +108,6 @@
                     </Grid>
                 </Grid>
             </Grid>
-            <Line Style="{StaticResource Separador}" />
             <Grid
                 Margin="8"
                 RowDefinitions="auto,auto"
@@ -92,10 +129,12 @@
                         IsSpellCheckEnabled="True"
                         Keyboard="Text"
                         Placeholder="Requerido"
+                        Text="{Binding Actividad, Mode=OneWay}"
                         VerticalTextAlignment="Start" />
                 </Frame>
             </Grid>
-            <Grid
+            <Line Style="{StaticResource Separador}" />
+            <!--<Grid
                 ColumnDefinitions="*,*"
                 ColumnSpacing="8">
                 <Button
@@ -108,7 +147,16 @@
                     Command="{Binding GuardarCommand}"
                     IsEnabled="{Binding EnableGuardar, Mode=OneWay}"
                     Text="Guardar" />
-            </Grid>
+            </Grid>-->
         </VerticalStackLayout>
-    </Frame>
+        <Grid
+            Grid.Row="2"
+            Padding="8"
+            Style="{StaticResource FooterBar}">
+            <Label
+                Grid.Row="0"
+                Style="{StaticResource Autor}"
+                Text="{Binding SelectedSemanaItem.NombreDia, Mode=OneWay, StringFormat='Actividades del {0}'}" />
+        </Grid>
+    </Grid>
 </ContentPage>

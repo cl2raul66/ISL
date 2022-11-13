@@ -8,6 +8,6 @@ namespace ISL.Modelos;
 //    public int NoSemana { get; set; }
 //    public List<ActividadDiaria> Labores { get; set; }
 //}
-public record Expediente(string Usuario, int NoSemana, Dictionary<string, ActividadDiaria> Labores)
+public record Expediente(string Usuario, int NoSemana, Dictionary<string, ActividadDiaria[]> Labores, string Observaciones)
 {
 }

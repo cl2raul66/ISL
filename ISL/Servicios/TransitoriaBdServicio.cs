@@ -7,12 +7,11 @@ public interface ITransitoriaBdServicio
 {
     bool ExisteBd { get; }
     bool ExisteDatos { get; }
-    IEnumerable<Expediente> GetAllExpediente { get; }
+    Expediente GetExpediente { get; }
 
-    Dictionary<string, ActividadDiaria> GetLaboresFromExpediente(int noSemana);
-    Dictionary<string, int> GetTotalLaboresFromExpediente(int noSemana);
-    bool InsertExpediente(Expediente entity);
-    bool UpsertActividadDiaria(int noSemana, string dia, ActividadDiaria actividad);
+    Dictionary<string, int> GetTotalLaboresPorDia(Dictionary<string, ActividadDiaria[]> labores);
+    bool UpsertActividadDiaria(int noSemana, string dia, ActividadDiaria actividad, string observaciones);
+    bool UpsertExpediente(Expediente entity);
 }
 
 public class TransitoriaBdServicio : ITransitoriaBdServicio
@@ -39,38 +38,48 @@ public class TransitoriaBdServicio : ITransitoriaBdServicio
 
     public bool ExisteDatos { private set; get; }
 
-    public IEnumerable<Expediente> GetAllExpediente => collection.FindAll().Reverse();
+    public Expediente GetExpediente => collection.FindAll().FirstOrDefault();
 
-    public bool InsertExpediente(Expediente entity) => collection.Insert(entity) is not null;
-
-    public Dictionary<string, int> GetTotalLaboresFromExpediente(int noSemana)
+    public bool UpsertExpediente(Expediente entity)
     {
-        var labores = GetLaboresFromExpediente(noSemana);
+        bool resul = ExisteDatos switch
+        {
+            true => collection.Update(entity),
+            false => collection.Insert(entity) is not null
+        };
+
+        return resul;
+    }
+
+    public Dictionary<string, int> GetTotalLaboresPorDia(Dictionary<string, ActividadDiaria[]> labores)
+    {
         Dictionary<string, int> resul = new();
         foreach (var item in labores)
         {
-            resul.Add(item.Key, item.Value.Adtividades.Count);
+            resul.Add(item.Key, item.Value.Count());
         }
 
         return resul;
     }
 
-    //public bool UpdateExpediente(Expediente entity) => collection.Update(entity);
-
-    public Dictionary<string, ActividadDiaria> GetLaboresFromExpediente(int noSemana) => collection.FindOne(x => x.NoSemana == noSemana)?.Labores ?? new();
-
-    public bool UpsertActividadDiaria(int noSemana, string dia, ActividadDiaria actividad)
+    public bool UpsertActividadDiaria(int noSemana, string dia, ActividadDiaria actividad, string observaciones)
     {
-        Dictionary<string, ActividadDiaria> resul = new();
         Expediente expediente = collection.FindOne(x => x.NoSemana == noSemana);
+        List<ActividadDiaria> resul = new();
 
-        if (!expediente.Labores?.Any() ?? false)
+        if (!expediente.Labores?.Any() ?? false || !expediente.Labores.ContainsKey(dia))
         {
-            resul = expediente.Labores;
+            resul.Add(actividad);
+            expediente.Labores.Add(dia, resul.ToArray());
         }
-        resul.Add(dia, actividad);
+        else
+        {
+            resul = expediente.Labores[dia].ToList();
+            resul.Add(actividad);
+            expediente.Labores.Add(dia, resul.ToArray());
+        }
 
-        Expediente expedienteNew = new(expediente.Usuario, expediente.NoSemana, resul);
+        Expediente expedienteNew = new(expediente.Usuario, expediente.NoSemana, expediente.Labores, observaciones);
 
         return collection.Update(expedienteNew);
     }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ISL.Vistas.PgModObservaciones"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+    xmlns:ctm="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:ISL.VistaModelos"
+    Title="Modificar - Observaciones"
+    x:DataType="vm:PgModObservacionesVistaModelo"
+    BackgroundColor="#aa121212"
+    Shell.PresentationMode="ModalAnimated">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding CancelarCommand}" />
+    </Shell.BackButtonBehavior>
+
+    <Frame
+        Margin="8"
+        BackgroundColor="{StaticResource PrincipalBg}"
+        VerticalOptions="Center">
+        <VerticalStackLayout Spacing="8">
+            <Label
+                FontSize="Title"
+                HorizontalOptions="Center"
+                Text="Modificar - Observaciones"
+                VerticalOptions="Center" />
+            <Grid
+                Margin="8"
+                RowDefinitions="auto,auto"
+                RowSpacing="4">
+                <Label
+                    Grid.Row="0"
+                    Style="{StaticResource HeaderCtrl}"
+                    Text="Observaciones:" />
+                <Frame
+                    Grid.Row="1"
+                    Margin="0"
+                    Padding="8,2"
+                    BackgroundColor="Transparent"
+                    BorderColor="{StaticResource SecundarioBg}"
+                    CornerRadius="4">
+                    <Entry
+                        android:Entry.ImeOptions="Done"
+                        ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference BtnGuardar}"
+                        ClearButtonVisibility="WhileEditing"
+                        HeightRequest="100"
+                        IsSpellCheckEnabled="True"
+                        Keyboard="Text"
+                        ReturnCommand="{Binding GuardarCommand}"
+                        Text="{Binding Observaciones, Mode=TwoWay}" />
+                </Frame>
+            </Grid>
+            <Grid
+                ColumnDefinitions="*,*"
+                ColumnSpacing="8">
+                <Button
+                    Grid.Column="0"
+                    Command="{Binding CancelarCommand}"
+                    Text="Cancelar" />
+                <Button
+                    x:Name="BtnGuardar"
+                    Grid.Column="1"
+                    Command="{Binding GuardarCommand}"
+                    IsEnabled="{Binding EnableGuardar, Mode=OneWay}"
+                    Text="Guardar" />
+            </Grid>
+        </VerticalStackLayout>
+    </Frame>
+</ContentPage>

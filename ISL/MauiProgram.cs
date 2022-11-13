@@ -21,6 +21,8 @@ public static class MauiProgram
         builder.Services.AddTransient<PgPrincipalVistaModelo>();
         builder.Services.AddTransient<PgAjustesVistaModelo>();
         builder.Services.AddTransient<PgModNCVistaModelo>();
+        builder.Services.AddTransient<PgAgregarActividadVistaModelo>();
+        builder.Services.AddTransient<PgModObservacionesVistaModelo>();
 
         builder.UseBarcodeReader();
         builder.ConfigureFonts(fonts =>
@@ -31,6 +33,8 @@ public static class MauiProgram
         builder.Services.AddTransient<PgPrincipal>();
         builder.Services.AddTransient<PgAjustes>();
         builder.Services.AddTransient<PgModNC>();
+        builder.Services.AddTransient<PgAgregarActividad>();
+        builder.Services.AddTransient<PgModObservaciones>();
 
         return builder.Build();
 	}

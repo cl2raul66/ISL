@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DocumentFormat.OpenXml.Linq;
 using ISL.Modelos;
 using ISL.Servicios;
 using ISL.Utiles.Enumeradores;
@@ -7,6 +8,7 @@ using ISL.Vistas;
 using Microsoft.Maui.ApplicationModel.DataTransfer;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 
 namespace ISL.VistaModelos;
 
@@ -109,7 +111,16 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     {
         if (EnableAgregarActividad)
         {
-            await Shell.Current.GoToAsync(nameof(PgAgregarActividad), true);
+            await Shell.Current.GoToAsync(nameof(PgAgregarActividad), true, new Dictionary<string, object>() { { nameof(SelectedSemanaItem), SelectedSemanaItem } });
+        }
+    }
+
+    [RelayCommand]
+    public async Task GoToObservaciones()
+    {
+        if (EnableAgregarActividad)
+        {
+            await Shell.Current.GoToAsync(nameof(PgModObservaciones), true);
         }
     }
 
@@ -139,14 +150,21 @@ public partial class PgPrincipalVistaModelo : ObservableObject
 
     private void SetCurrentSemana()
     {
-        var datos = TransitoriaBd.GetLaboresFromExpediente(NoSemanaDelAnio);
-        if (datos.Any())
+        var datos = TransitoriaBd.GetExpediente?.Labores;
+        if (datos?.Any() ?? false)
         {
             foreach (var item in datos)
             {
-                int c = item.Value.Adtividades.Count;
-                ValueTuple<DateTime?, DateTime?> h = new(item.Value.Inicio, item.Value.Fin);
-                string t = h.Item1 is null ? "No laborado" : c == 0 ? "No hay labores realizadas" : item.Value.Adtividades.Count > 1 ? $"{item.Value.Adtividades.Count} Labores realizadas" : $"{item.Value.Adtividades.Count} Labor realizada";
+                int c = 0;
+                ValueTuple<DateTime?, DateTime?> h = new(null,null);
+                foreach (var ad in item.Value)
+                {
+                    c = ad.Adtividades.Count;
+                    h = new(ad.Inicio, ad.Fin);
+                    
+                }
+                string t = h.Item1 is null ? "No laborado" : c == 0 ? "No hay labores realizadas" : c > 1 ? $"{c} Labores realizadas" : $"{c} Labor realizada";
+
                 CurrentSemana.Add(new() { NombreDia = item.Key, Texto = t, Horario = new(h.Item1?.ToString("HH:mm") ?? string.Empty, h.Item2?.ToString("HH:mm") ?? string.Empty) });
             }
         }
