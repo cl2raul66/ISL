@@ -1,52 +1,32 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DocumentFormat.OpenXml.Linq;
 using ISL.Modelos;
 using ISL.Servicios;
 using ISL.Utiles.Enumeradores;
 using ISL.Vistas;
-using Microsoft.Maui.ApplicationModel.DataTransfer;
 using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
 
 namespace ISL.VistaModelos;
 
 [QueryProperty(nameof(NombreUsuario), nameof(NombreUsuario))]
 public partial class PgPrincipalVistaModelo : ObservableObject
 {
-    private readonly ITransitoriaBdServicio TransitoriaBd = MauiProgram.CreateMauiApp().Services.GetService<ITransitoriaBdServicio>();
+    private readonly ITransitoriaBdServicio transitoriaBd;
+    private readonly IFechaServicio fechaSer;
 
-    private DateTimeFormatInfo dtfi = new()
+
+    public PgPrincipalVistaModelo(ITransitoriaBdServicio transitoriaBdServicio, IFechaServicio fechaServicio)
     {
-        FirstDayOfWeek = DayOfWeek.Monday,
-        DateSeparator = "/",
-        FullDateTimePattern = "dddd, dd/MM/yyyy",
-        ShortDatePattern = "dd/MM/yyyy",
-        DayNames = new[] { "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" },
-        AbbreviatedDayNames = new[] { "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" },
-        ShortestDayNames = new[] { "Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab" },
-    };
-    private DateTime hoy = DateTime.Now;
-    private DayOfWeek dow;
-    private GregorianCalendar gc = new(GregorianCalendarTypes.USEnglish);
-    private int NoSemanaDelAnio = 0;
-
-    public PgPrincipalVistaModelo()
-    {
-        dow = hoy.DayOfWeek;
-        NoSemanaDelAnio = gc.GetWeekOfYear(hoy, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
-
-        SemanaActual = $"Semana: {NoSemanaDelAnio} del {gc.AddDays(hoy, (int)dow == 0 ? -6 : (int)dow == 1 ? 0 : -1 * (int)dow).ToShortDateString()} al {gc.AddDays(hoy, (int)dow == 0 ? 0 : 7 - (int)dow).ToShortDateString()}";
-        FechaHoy = hoy.ToString("D");
+        transitoriaBd = transitoriaBdServicio;
+        fechaSer = fechaServicio;
 
         NombreUsuario = Preferences.Get(nameof(NombreUsuario), string.Empty);
-        if (!TransitoriaBd.ExisteDatos && !EnableGoTo)
+        if (!transitoriaBd.ExisteDatos && !EnableQrCode)
         {
             Notificaciones.Add(new(0, "Sea bienvenido a Informe Semanal de Labores (ISL), ingrese los datos requeridos para poder usar esta aplicación. Gracias.", MensajeTipo.Informacion));
         }
 
-        if (!TransitoriaBd.ExisteDatos)
+        if (!transitoriaBd.ExisteDatos)
         {
             Notificaciones.Add(new(1, "No existen datos, en Ajustes configure los requeridos.", MensajeTipo.Precaucion));
         }
@@ -58,11 +38,19 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     }
 
     [ObservableProperty]
-    private ObservableCollection<SemanaItem> currentSemana;
+    private ObservableCollection<ActividadDiaria> actividadesSemana;
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(EnableAgregarActividad))]
-    private SemanaItem selectedSemanaItem;
+    private ActividadDiaria selectedActividadesSemana;
+    public ActividadDiaria SelectedActividadesSemana {
+        get => selectedActividadesSemana;
+        set
+        {
+            if (SetProperty(ref selectedActividadesSemana, value))
+            {
+                EnableAgregarActividad = value is not null;
+            }
+        }
+    }
 
     [ObservableProperty]
     private ObservableCollection<MensajeItem> notificaciones = new();
@@ -75,29 +63,47 @@ public partial class PgPrincipalVistaModelo : ObservableObject
         {
             if (SetProperty(ref nombreUsuario, value))
             {
-                ComprobarNombreUsuario();
                 if (string.IsNullOrEmpty(value))
                 {
-                    NombreUsuario = Preferences.Get(nameof(NombreUsuario), string.Empty);
+                    Notificaciones.Add(new(2, "No hay usuario registrado, en Ajustes puede solucionar este problema.", MensajeTipo.Precaucion));
                 }
+                else if (Notificaciones.Any())
+                {
+                    var msg = Notificaciones.FirstOrDefault(x => x.Id == 2);
+                    bool msgRemove = Notificaciones.Remove(msg);
+                    if (msgRemove)
+                    {
+                        SetCurrentSemana();
+                    }
+                }
+                EnableObservaciones = !string.IsNullOrEmpty(value);
+                EnableQrCode = !string.IsNullOrEmpty(value);
+                FechaHoy = string.IsNullOrEmpty(value) ? string.Empty : fechaSer.Hoy.ToString("D");
+                SemanaActual = string.IsNullOrEmpty(value) ? string.Empty : $"Semana: {fechaSer.NoSemanaDelAnio} del {fechaSer.PrimerDia.ToShortDateString()} al {fechaSer.UltimoDia.ToShortDateString()}";
 
             }
         }
     }
 
     [ObservableProperty]
-    private string fechaHoy = string.Empty;
+    private string fechaHoy;
 
     [ObservableProperty]
-    private string semanaActual = string.Empty;
+    private string semanaActual;
 
-    private bool EnableGoTo => !string.IsNullOrEmpty(NombreUsuario);
-    public bool EnableAgregarActividad => SelectedSemanaItem is not null;
+    [ObservableProperty]
+    private bool enableQrCode;
 
-    [RelayCommand(CanExecute = nameof(EnableGoTo))]
+    [ObservableProperty]
+    private bool enableAgregarActividad;
+
+    [ObservableProperty]
+    private bool enableObservaciones;
+
+    [RelayCommand(CanExecute = nameof(EnableQrCode))]
     private async Task GoToQrCode()
     {
-        if (EnableGoTo)
+        if (EnableQrCode)
         {
             await Shell.Current.GoToAsync(nameof(PgQrCode), true);
         }
@@ -111,14 +117,14 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     {
         if (EnableAgregarActividad)
         {
-            await Shell.Current.GoToAsync(nameof(PgAgregarActividad), true, new Dictionary<string, object>() { { nameof(SelectedSemanaItem), SelectedSemanaItem } });
+            await Shell.Current.GoToAsync(nameof(PgAgregarActividad), true, new Dictionary<string, object>() { { nameof(selectedActividadesSemana), selectedActividadesSemana } });
         }
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(EnableObservaciones))]
     public async Task GoToObservaciones()
     {
-        if (EnableAgregarActividad)
+        if (EnableObservaciones)
         {
             await Shell.Current.GoToAsync(nameof(PgModObservaciones), true);
         }
@@ -148,55 +154,48 @@ public partial class PgPrincipalVistaModelo : ObservableObject
         });
     }
 
+    #region extra
     private void SetCurrentSemana()
     {
-        var datos = TransitoriaBd.GetExpediente?.Labores;
+        var datos = transitoriaBd.GetExpediente?.Labores;
         if (datos?.Any() ?? false)
         {
-            foreach (var item in datos)
-            {
-                int c = 0;
-                ValueTuple<DateTime?, DateTime?> h = new(null,null);
-                foreach (var ad in item.Value)
-                {
-                    c = ad.Adtividades.Count;
-                    h = new(ad.Inicio, ad.Fin);
-                    
-                }
-                string t = h.Item1 is null ? "No laborado" : c == 0 ? "No hay labores realizadas" : c > 1 ? $"{c} Labores realizadas" : $"{c} Labor realizada";
+            //foreach (var item in datos)
+            //{
+            //    int c = 0;
+            //    ValueTuple<DateTime?, DateTime?> h = new(null, null);
+            //    foreach (var ad in item.Value)
+            //    {
+            //        c = ad.Adtividades.Count;
+            //        h = new(ad.Inicio, ad.Fin);
 
-                CurrentSemana.Add(new() { NombreDia = item.Key, Texto = t, Horario = new(h.Item1?.ToString("HH:mm") ?? string.Empty, h.Item2?.ToString("HH:mm") ?? string.Empty) });
-            }
+            //    }
+            //    string t = h.Item1 is null ? "No laborado" : c == 0 ? "No hay labores realizadas" : c > 1 ? $"{c} Labores realizadas" : $"{c} Labor realizada";
+
+            //    ActividadesSemana.Add(new() { NombreDia = item.Key, Texto = t, Horario = new(h.Item1?.ToString("HH:mm") ?? string.Empty, h.Item2?.ToString("HH:mm") ?? string.Empty) });
+            //}
         }
         else
         {
-            CurrentSemana = new() {
-                new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Monday)},
-                new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Tuesday)},
-                new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Wednesday),Texto="12 Labores realizadas", Horario=new("07:00 AM","05:00 AM")},
-                new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Thursday),Horario=new("07:00 AM",null)},
-                new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Friday)},
-                new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Saturday)},
-                new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Sunday)},
+            ActividadesSemana = new() {
+                new(fechaSer.PrimerDia,null,null,null),
+                new(fechaSer.PrimerDia.AddDays(1),null,null,null),
+                new(fechaSer.PrimerDia.AddDays(2),null,null,null),
+                new(fechaSer.PrimerDia.AddDays(3),null,null,null),
+                new(fechaSer.PrimerDia.AddDays(4),null,null,null),
+                new(fechaSer.PrimerDia.AddDays(5),null,null,null),
+                new(fechaSer.UltimoDia,null,null,null),
+                //new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Monday)},
+                //new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Tuesday)},
+                //new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Wednesday),Texto="12 Labores realizadas", Horario=new("07:00 AM","05:00 AM")},
+                //new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Thursday),Horario=new("07:00 AM",null)},
+                //new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Friday)},
+                //new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Saturday)},
+                //new SemanaItem(){ NombreDia=dtfi.GetAbbreviatedDayName(DayOfWeek.Sunday)},
             };
         }
 
-        SelectedSemanaItem = CurrentSemana[(int)dow == 0 ? 6 : (int)dow - 1];
-    }
-
-    #region extra
-    private void ComprobarNombreUsuario()
-    {
-        if (!EnableGoTo)
-        {
-            Notificaciones.Add(new(2, "No hay usuario registrado, en Ajustes puede solucionar este problema.", MensajeTipo.Precaucion));
-        }
-        else if (Notificaciones.Any())
-        {
-            var msg = Notificaciones.FirstOrDefault(x => x.Id == 2);
-            Notificaciones.Remove(msg);
-            SetCurrentSemana();
-        }
+        SelectedActividadesSemana = ActividadesSemana[(int)fechaSer.DowHoy == 0 ? 6 : (int)fechaSer.DowHoy - 1];
     }
     #endregion
 }

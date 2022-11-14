@@ -22,6 +22,7 @@
             <cvt:MensajeTipoToImagenConverter x:Key="MensajeTipoToImagen" />
             <cvt:MensajeTipoToBacgrundColorConverter x:Key="MensajeTipoToBacgrundColor" />
             <cvt:StringToInitials2Converter x:Key="StringToInitials2" />
+            <cvt:DateTimeToDiaSemanaConverter x:Key="DateTimeToDiaSemana" />
 
             <Style TargetType="TextCell">
                 <Setter Property="TextColor" Value="{StaticResource Secundario}" />

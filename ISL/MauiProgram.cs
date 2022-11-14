@@ -18,6 +18,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<ILocalBdServicio, LocalBdServicio>();
         builder.Services.AddSingleton<ITransitoriaBdServicio, TransitoriaBdServicio>();
+        builder.Services.AddSingleton<IFechaServicio, FechaServicio>();
         builder.Services.AddTransient<PgPrincipalVistaModelo>();
         builder.Services.AddTransient<PgAjustesVistaModelo>();
         builder.Services.AddTransient<PgModNCVistaModelo>();

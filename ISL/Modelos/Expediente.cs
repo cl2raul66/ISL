@@ -1,5 +1,4 @@
-﻿using LiteDB;
-
+﻿
 namespace ISL.Modelos;
 
 //public class Expediente
@@ -8,6 +7,6 @@ namespace ISL.Modelos;
 //    public int NoSemana { get; set; }
 //    public List<ActividadDiaria> Labores { get; set; }
 //}
-public record Expediente(string Usuario, int NoSemana, Dictionary<string, ActividadDiaria[]> Labores, string Observaciones)
+public record Expediente(Contacto Usuario, int NoSemana, List<ActividadDiaria> Labores, string Observaciones)
 {
 }

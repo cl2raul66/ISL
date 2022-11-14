@@ -156,7 +156,7 @@
             <Label
                 Grid.Row="0"
                 Style="{StaticResource Autor}"
-                Text="{Binding SelectedSemanaItem.NombreDia, Mode=OneWay, StringFormat='Actividades del {0}'}" />
+                Text="{Binding SelectedActividadesSemana.fecha, Mode=OneWay, StringFormat='Actividades del {0}'}" />
         </Grid>
     </Grid>
 </ContentPage>

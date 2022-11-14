@@ -13,6 +13,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(PgQrCode), typeof(PgQrCode));
         Routing.RegisterRoute(nameof(PgAjustes), typeof(PgAjustes));
         Routing.RegisterRoute(nameof(PgModObservaciones), typeof(PgModObservaciones));
-        //Routing.RegisterRoute($"{nameof(PgAjustes)}/{nameof(PgModNC)}", typeof(PgModNC));
+        Routing.RegisterRoute($"{nameof(PgAjustes)}/{nameof(PgModNC)}", typeof(PgModNC));
     }
 }

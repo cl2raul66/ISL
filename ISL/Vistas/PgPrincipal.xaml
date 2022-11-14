@@ -39,8 +39,8 @@
             </DataTemplate>
 
             <DataTemplate
-                x:Key="SemanaItemValidos"
-                x:DataType="modelos:SemanaItem">
+                x:Key="ActividadesSemanaDataTemplate"
+                x:DataType="modelos:ActividadDiaria">
                 <Frame
                     x:Name="FItem"
                     Margin="0,0,0,8"
@@ -56,13 +56,13 @@
                             <Label
                                 x:Name="LSemana"
                                 Style="{StaticResource LabelSemana}"
-                                Text="{Binding NombreDia, Mode=OneWay}" />
+                                Text="{Binding fecha, StringFormat='{0:2}', Mode=OneWay, Converter={StaticResource DateTimeToDiaSemana}}" />
                         </Frame>
                         <Label
                             x:Name="LTextoItem"
                             Grid.Column="1"
                             Style="{StaticResource LabelTextoItem}"
-                            Text="{Binding Texto, Mode=OneWay, TargetNullValue='No laborado'}"
+                            Text="{Binding Actividades, Mode=OneWay, TargetNullValue='No laborado'}"
                             TextColor="{StaticResource Principal}" />
                         <Label
                             x:Name="LHorarioItem"
@@ -71,57 +71,15 @@
                             TextColor="{StaticResource Principal}">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="{Binding Horario.Item1, Mode=OneWay}" />
+                                    <Span Text="{Binding Inicio, Mode=OneWay}" />
                                     <Span Text=" &#10;" />
-                                    <Span Text="{Binding Horario.Item2, Mode=OneWay}" />
+                                    <Span Text="{Binding Fin, Mode=OneWay}" />
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
                     </Grid>
                 </Frame>
             </DataTemplate>
-            <DataTemplate
-                x:Key="SemanaItemInvalidos"
-                x:DataType="modelos:SemanaItem">
-                <Frame
-                    Margin="0,0,0,8"
-                    Style="{StaticResource FrameItem}">
-                    <Grid
-                        ColumnDefinitions="50,*,auto"
-                        ColumnSpacing="8">
-                        <Frame
-                            x:Name="FSemana"
-                            Grid.Column="0"
-                            Style="{StaticResource FrameSemana}">
-                            <Label
-                                x:Name="LSemana"
-                                Style="{StaticResource LabelSemana}"
-                                Text="{Binding NombreDia, Mode=OneWay}" />
-                        </Frame>
-                        <Label
-                            x:Name="LTextoItem"
-                            Grid.Column="1"
-                            Style="{StaticResource LabelTextoItem}"
-                            Text="{Binding Texto, Mode=OneWay, TargetNullValue='No laborado'}" />
-                        <Label
-                            x:Name="LHorarioItem"
-                            Grid.Column="2"
-                            Style="{StaticResource LabelHorarioItem}">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="{Binding Horario.Item1, Mode=OneWay, TargetNullValue='07:00 AM'}" />
-                                    <Span Text=" &#10;" />
-                                    <Span Text="{Binding Horario.Item2, Mode=OneWay, TargetNullValue='05:00 PM'}" />
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
-                    </Grid>
-                </Frame>
-            </DataTemplate>
-            <utiles:SemanaItemDataTemplateSelector
-                x:Key="SemanaItemDataTemplate"
-                InvalidTemplate="{StaticResource SemanaItemInvalidos}"
-                ValidTemplate="{StaticResource SemanaItemValidos}" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -146,6 +104,7 @@
                     Aspect="Center"
                     Command="{Binding GoToAgregarActividadCommand}"
                     HeightRequest="42"
+                    IsEnabled="{Binding EnableAgregarActividad}"
                     Source="document_new.png"
                     WidthRequest="42" />
                 <ImageButton
@@ -179,11 +138,11 @@
                 Style="{StaticResource Informacion}"
                 Text="{Binding NombreUsuario, StringFormat='Usuario: {0}', Mode=OneWay}" />
             <Label
-                IsVisible="{Binding NombreUsuario, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
+                IsVisible="{Binding SemanaActual, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
                 Style="{StaticResource Informacion}"
                 Text="{Binding SemanaActual, Mode=OneWay}" />
             <Label
-                IsVisible="{Binding NombreUsuario, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
+                IsVisible="{Binding FechaHoy, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
                 Style="{StaticResource Informacion}"
                 Text="{Binding FechaHoy, StringFormat='Hoy es {0}', Mode=OneWay}" />
             <!--<Line Style="{StaticResource Separador}" />-->
@@ -191,15 +150,16 @@
         <CollectionView
             Grid.Row="2"
             Margin="8"
-            ItemTemplate="{StaticResource SemanaItemDataTemplate}"
-            ItemsSource="{Binding CurrentSemana, Mode=OneWay}"
-            SelectedItem="{Binding SelectedSemanaItem, Mode=TwoWay}"
+            ItemTemplate="{StaticResource ActividadesSemanaDataTemplate}"
+            ItemsSource="{Binding ActividadesSemana, Mode=OneWay}"
+            SelectedItem="{Binding SelectedActividadesSemana, Mode=TwoWay}"
             SelectionMode="Single" />
         <Button
             Grid.Row="3"
             Margin="8"
-            Text="Observaciones" 
-            Command="{Binding GoToObservacionesCommand}"/>
+            Command="{Binding GoToObservacionesCommand}"
+            IsEnabled="{Binding EnableObservaciones, Mode=OneWay}"
+            Text="Observaciones" />
         <!--<VerticalStackLayout
             Grid.Row="3"
             Margin="8"

@@ -6,7 +6,7 @@ using ISL.Modelos;
 
 namespace ISL.VistaModelos;
 
-[QueryProperty(nameof(SelectedSemanaItem), nameof(SelectedSemanaItem))]
+[QueryProperty(nameof(selectedActividadesSemana), nameof(selectedActividadesSemana))]
 public partial class PgAgregarActividadVistaModelo : ObservableObject
 {
     [ObservableProperty]
@@ -15,9 +15,9 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
     
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(TieneHorario))]
-    private SemanaItem selectedSemanaItem;
+    private ActividadDiaria selectedActividadesSemana;
 
-    public bool TieneHorario => !string.IsNullOrEmpty(SelectedSemanaItem?.Horario?.Item1);
+    public bool TieneHorario => !string.IsNullOrEmpty(SelectedActividadesSemana?.Inicio?.ToString("HH:mm"));
 
     [RelayCommand]
     private async Task Cancelar()

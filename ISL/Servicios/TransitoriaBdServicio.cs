@@ -9,8 +9,6 @@ public interface ITransitoriaBdServicio
     bool ExisteDatos { get; }
     Expediente GetExpediente { get; }
 
-    Dictionary<string, int> GetTotalLaboresPorDia(Dictionary<string, ActividadDiaria[]> labores);
-    bool UpsertActividadDiaria(int noSemana, string dia, ActividadDiaria actividad, string observaciones);
     bool UpsertExpediente(Expediente entity);
 }
 
@@ -49,38 +47,5 @@ public class TransitoriaBdServicio : ITransitoriaBdServicio
         };
 
         return resul;
-    }
-
-    public Dictionary<string, int> GetTotalLaboresPorDia(Dictionary<string, ActividadDiaria[]> labores)
-    {
-        Dictionary<string, int> resul = new();
-        foreach (var item in labores)
-        {
-            resul.Add(item.Key, item.Value.Count());
-        }
-
-        return resul;
-    }
-
-    public bool UpsertActividadDiaria(int noSemana, string dia, ActividadDiaria actividad, string observaciones)
-    {
-        Expediente expediente = collection.FindOne(x => x.NoSemana == noSemana);
-        List<ActividadDiaria> resul = new();
-
-        if (!expediente.Labores?.Any() ?? false || !expediente.Labores.ContainsKey(dia))
-        {
-            resul.Add(actividad);
-            expediente.Labores.Add(dia, resul.ToArray());
-        }
-        else
-        {
-            resul = expediente.Labores[dia].ToList();
-            resul.Add(actividad);
-            expediente.Labores.Add(dia, resul.ToArray());
-        }
-
-        Expediente expedienteNew = new(expediente.Usuario, expediente.NoSemana, expediente.Labores, observaciones);
-
-        return collection.Update(expedienteNew);
     }
 }
