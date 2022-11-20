@@ -6,6 +6,6 @@
 //    public DateTime Fin { get; set; }
 //    public List<string> Adtividades { get; set; }
 //}
-public record ActividadDiaria(DateTime fecha, DateTime? Inicio, DateTime? Fin, List<string> Actividades)
+public record ActividadDiaria(DateTime? Fecha, DateTime? HorarioEntrada, DateTime? HorarioSalida, List<string> Actividades)
 {
 }

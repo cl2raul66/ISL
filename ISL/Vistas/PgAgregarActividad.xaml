@@ -33,6 +33,7 @@
                     Aspect="Center"
                     Command="{Binding GuardarCommand}"
                     HeightRequest="42"
+                    IsEnabled="{Binding Actividad, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
                     Source="list_add.png"
                     WidthRequest="42" />
                 <ImageButton
@@ -57,8 +58,8 @@
             Spacing="8">
             <Grid
                 Margin="8"
-                IsVisible="{Binding TieneHorario}"
                 RowDefinitions="auto,auto"
+                IsVisible="{Binding TieneHorario, Mode=OneWay}"
                 RowSpacing="4">
                 <Label
                     Grid.Row="0"
@@ -129,7 +130,7 @@
                         IsSpellCheckEnabled="True"
                         Keyboard="Text"
                         Placeholder="Requerido"
-                        Text="{Binding Actividad, Mode=OneWay}"
+                        Text="{Binding Actividad, Mode=OneWayToSource}"
                         VerticalTextAlignment="Start" />
                 </Frame>
             </Grid>
@@ -153,10 +154,14 @@
             Grid.Row="2"
             Padding="8"
             Style="{StaticResource FooterBar}">
+            <!--<Label
+                Grid.Row="0"
+                Style="{StaticResource Autor}"
+                Text="Actividades del {0}" />-->
             <Label
                 Grid.Row="0"
                 Style="{StaticResource Autor}"
-                Text="{Binding SelectedActividadesSemana.fecha, Mode=OneWay, StringFormat='Actividades del {0}'}" />
+                Text="{Binding SelectedDia, Mode=OneWay, StringFormat='Actividades del {0}'}" />
         </Grid>
     </Grid>
 </ContentPage>

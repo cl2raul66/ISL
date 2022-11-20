@@ -7,12 +7,8 @@ public class DateTimeToDiaSemanaConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is null)
-        {
-            return string.Empty;
-        }
         FechaServicio fechaServicio = new();
-        return fechaServicio.DiaSemana((DateTime)value);
+        return value is not null ? fechaServicio.DiaSemana((DateTime)value) : string.Empty;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

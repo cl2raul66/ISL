@@ -41,7 +41,8 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     private ObservableCollection<ActividadDiaria> actividadesSemana;
 
     private ActividadDiaria selectedActividadesSemana;
-    public ActividadDiaria SelectedActividadesSemana {
+    public ActividadDiaria SelectedActividadesSemana
+    {
         get => selectedActividadesSemana;
         set
         {
@@ -100,34 +101,25 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     [ObservableProperty]
     private bool enableObservaciones;
 
-    [RelayCommand(CanExecute = nameof(EnableQrCode))]
+    [RelayCommand]
     private async Task GoToQrCode()
     {
-        if (EnableQrCode)
-        {
-            await Shell.Current.GoToAsync(nameof(PgQrCode), true);
-        }
+        await Shell.Current.GoToAsync(nameof(PgQrCode), true);
     }
 
     [RelayCommand]
     private async Task GoToAjustes() => await Shell.Current.GoToAsync(nameof(PgAjustes), true, new Dictionary<string, object>() { { nameof(NombreUsuario), NombreUsuario } });
 
-    [RelayCommand(CanExecute = nameof(EnableAgregarActividad))]
+    [RelayCommand]
     public async Task GoToAgregarActividad()
     {
-        if (EnableAgregarActividad)
-        {
-            await Shell.Current.GoToAsync(nameof(PgAgregarActividad), true, new Dictionary<string, object>() { { nameof(selectedActividadesSemana), selectedActividadesSemana } });
-        }
+        await Shell.Current.GoToAsync(nameof(PgAgregarActividad), true, new Dictionary<string, object>() { { nameof(ActividadDiaria), SelectedActividadesSemana } });
     }
 
-    [RelayCommand(CanExecute = nameof(EnableObservaciones))]
+    [RelayCommand]
     public async Task GoToObservaciones()
     {
-        if (EnableObservaciones)
-        {
-            await Shell.Current.GoToAsync(nameof(PgModObservaciones), true);
-        }
+        await Shell.Current.GoToAsync(nameof(PgModObservaciones), true);
     }
 
     [RelayCommand]

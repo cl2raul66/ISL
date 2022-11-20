@@ -56,7 +56,7 @@
                             <Label
                                 x:Name="LSemana"
                                 Style="{StaticResource LabelSemana}"
-                                Text="{Binding fecha, StringFormat='{0:2}', Mode=OneWay, Converter={StaticResource DateTimeToDiaSemana}}" />
+                                Text="{Binding Fecha, Mode=OneWay, Converter={StaticResource DateTimeToDiaSemanaIniciales}}" />
                         </Frame>
                         <Label
                             x:Name="LTextoItem"
@@ -71,9 +71,9 @@
                             TextColor="{StaticResource Principal}">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="{Binding Inicio, Mode=OneWay}" />
+                                    <Span Text="{Binding HorarioEntrada, Mode=OneWay}" />
                                     <Span Text=" &#10;" />
-                                    <Span Text="{Binding Fin, Mode=OneWay}" />
+                                    <Span Text="{Binding HorarioSalida, Mode=OneWay}" />
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>

@@ -1,13 +1,14 @@
-﻿using System.Globalization;
+﻿using ISL.Servicios;
+using System.Globalization;
 
 namespace ISL.Utiles.Convertidores
 {
-    public class StringToInitials2Converter : IValueConverter
+    public class DateTimeToDiaSemanaInicialesConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string valueString = value as string;
-            return !string.IsNullOrEmpty(valueString) ? valueString[..2] : string.Empty;
+            FechaServicio fechaServicio = new();
+            return value is not null ? fechaServicio.DiaSemanaIniciales((DateTime)value) : string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

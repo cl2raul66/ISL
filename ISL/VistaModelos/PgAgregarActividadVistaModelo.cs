@@ -3,21 +3,30 @@ using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ISL.Modelos;
+using ISL.Servicios;
 
 namespace ISL.VistaModelos;
 
-[QueryProperty(nameof(selectedActividadesSemana), nameof(selectedActividadesSemana))]
+[QueryProperty(nameof(SelectedActividadesSemana),nameof(ActividadDiaria))]
 public partial class PgAgregarActividadVistaModelo : ObservableObject
 {
+    private readonly IFechaServicio fechaSer;
+
+    public PgAgregarActividadVistaModelo(IFechaServicio fechaServicio)
+    {
+        fechaSer = fechaServicio;
+    }
+
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(EnableGuardar))]
     private string actividad;
-    
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(TieneHorario))]
+    [NotifyPropertyChangedFor(nameof(SelectedDia))]
     private ActividadDiaria selectedActividadesSemana;
 
-    public bool TieneHorario => !string.IsNullOrEmpty(SelectedActividadesSemana?.Inicio?.ToString("HH:mm"));
+    public bool TieneHorario => string.IsNullOrEmpty(SelectedActividadesSemana?.HorarioEntrada?.ToString("HH:mm"));
+    public string SelectedDia => SelectedActividadesSemana?.Fecha is null ? "no hay días" : fechaSer.DiaSemana((DateTime)SelectedActividadesSemana.Fecha);
 
     [RelayCommand]
     private async Task Cancelar()
@@ -28,24 +37,18 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
         await Shell.Current.GoToAsync($"{Location}", false);
     }
 
-    public bool EnableGuardar => !string.IsNullOrEmpty(Actividad);
-
-    [RelayCommand(CanExecute = nameof(EnableGuardar))]
+    [RelayCommand]
     private async Task Guardar()
     {
-        if (EnableGuardar)
-        {
-            //guardamos
-            CancellationTokenSource cancellationTokenSource = new();
-            string text = "Se guardo";
-            ToastDuration duration = ToastDuration.Short;
-            double fontSize = 14;
-            var toast = Toast.Make(text, duration, fontSize);
-            await toast.Show(cancellationTokenSource.Token);
+        //guardamos
+        CancellationTokenSource cancellationTokenSource = new();
+        string text = "Se guardo";
+        ToastDuration duration = ToastDuration.Short;
+        double fontSize = 14;
+        var toast = Toast.Make(text, duration, fontSize);
+        await toast.Show(cancellationTokenSource.Token);
 
-            //Preferences.Set(nameof(NombreUsuario), NombreUsuario.TrimEnd());
-            await Cancelar();
-        }
-        //await Task.CompletedTask;
+        //Preferences.Set(nameof(NombreUsuario), NombreUsuario.TrimEnd());
+        await Cancelar();
     }
 }

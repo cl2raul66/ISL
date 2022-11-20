@@ -10,6 +10,7 @@ public interface IFechaServicio
     DateTime PrimerDia { get; }
     DateTime UltimoDia { get; }
     string DiaSemana(DateTime fecha);
+    string DiaSemanaIniciales(DateTime fecha);
 }
 
 public class FechaServicio : IFechaServicio
@@ -37,5 +38,6 @@ public class FechaServicio : IFechaServicio
     public int NoSemanaDelAnio => gc.GetWeekOfYear(Hoy, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
     public DateTime PrimerDia => gc.AddDays(Hoy, (int)DowHoy == 0 ? -6 : (int)DowHoy == 1 ? 0 : -1 * (int)DowHoy);
     public DateTime UltimoDia => gc.AddDays(Hoy, (int)DowHoy == 0 ? 0 : 7 - (int)DowHoy);
-    public string DiaSemana(DateTime fecha) => dtfi.GetAbbreviatedDayName(fecha.DayOfWeek);
+    public string DiaSemana(DateTime fecha) => dtfi.GetDayName(fecha.DayOfWeek);
+    public string DiaSemanaIniciales(DateTime fecha) => dtfi.GetAbbreviatedDayName(fecha.DayOfWeek);
 }
