@@ -11,10 +11,6 @@
     BackgroundColor="#aa121212"
     Shell.PresentationMode="ModalAnimated">
 
-    <!--<Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding CancelarCommand}" />
-    </Shell.BackButtonBehavior>-->
-
     <Frame
         Margin="8"
         BackgroundColor="{StaticResource PrincipalBg}"
@@ -27,7 +23,7 @@
                 VerticalOptions="Center" />
             <Grid
                 Margin="8"
-                RowDefinitions="auto,auto"
+                RowDefinitions="auto,auto,auto"
                 RowSpacing="4">
                 <Label
                     Grid.Row="0"
@@ -39,9 +35,11 @@
                     Padding="8,2"
                     BackgroundColor="Transparent"
                     BorderColor="{StaticResource SecundarioBg}"
-                    CornerRadius="4">
+                    CornerRadius="4"
+                    MinimumHeightRequest="100">
                     <Editor
-                        HeightRequest="100"
+                        x:Name="EditorObservaciones"
+                        AutoSize="TextChanges"
                         Text="{Binding Observaciones, Mode=TwoWay}" />
                 </Frame>
             </Grid>
