@@ -7,14 +7,15 @@ public interface ITransitoriaBdServicio
 {
     bool ExisteBd { get; }
     bool ExisteDatos { get; }
-    Expediente GetExpediente { get; }
+    ExpedienteLocal GetExpediente { get; }
 
-    bool UpsertExpediente(Expediente entity);
+    bool UpsertExpediente(ExpedienteLocal entity);
 }
 
 public class TransitoriaBdServicio : ITransitoriaBdServicio
 {
-    private readonly ILiteCollection<Expediente> collection;
+    private readonly ILiteCollection<ExpedienteLocal> collection;
+    private List<ActividadDiaria> Labores = new();
 
     public TransitoriaBdServicio()
     {
@@ -26,8 +27,8 @@ public class TransitoriaBdServicio : ITransitoriaBdServicio
 
         LiteDatabase db = new(cnx);
 
-        collection = db.GetCollection<Expediente>();
-        ExisteBd = db.CollectionExists(nameof(Expediente));
+        collection = db.GetCollection<ExpedienteLocal>();
+        ExisteBd = db.CollectionExists(nameof(ExpedienteLocal));
         ExisteDatos = collection.LongCount() > 0;
         collection.EnsureIndex(x => x.NoSemana);
     }
@@ -36,13 +37,21 @@ public class TransitoriaBdServicio : ITransitoriaBdServicio
 
     public bool ExisteDatos { private set; get; }
 
-    public Expediente GetExpediente => collection.FindAll().FirstOrDefault();
+    public ExpedienteLocal GetExpediente
+    {
+        get
+        {
+            var resul = collection.FindAll().FirstOrDefault();
+            return resul;
+            //return new(resul.Usuario, resul.NoSemana, resul.Labores, resul.Observaciones);
+        }
+    }
 
-    public bool UpsertExpediente(Expediente entity)
+    public bool UpsertExpediente(ExpedienteLocal entity)
     {
         bool resul = ExisteDatos switch
         {
-            true => collection.Update(entity),
+            true => collection.Update(entity.NoSemana,entity),
             false => collection.Insert(entity) is not null
         };
 

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ISL.Vistas;
+using System.ComponentModel;
 
 namespace ISL.VistaModelos;
 
@@ -11,26 +12,27 @@ public partial class PgAjustesVistaModelo : ObservableObject
     [NotifyPropertyChangedFor(nameof(EstadoNombreUsuario))]
     private string nombreUsuario;
 
-    public string EstadoNombreUsuario
+    public string EstadoNombreUsuario => string.IsNullOrEmpty(NombreUsuario) ? "Sin establecer" : "Establecido";
+
+    [RelayCommand]
+    private async Task SetModNC() => await Shell.Current.GoToAsync(nameof(PgModNC));
+
+    [RelayCommand]
+    private async Task Regresar() => await Shell.Current.GoToAsync("..");
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        get
+        if (e.PropertyName == nameof(NombreUsuario))
         {
-            if (!string.IsNullOrEmpty(NombreUsuario) || Preferences.Get(nameof(NombreUsuario), string.Empty) is not null)
-            {
-                return "Establecido";
-            }
-            return "Sin establecer";
+            //var msg = Toast.Make($"Nombre de usuario: {!string.IsNullOrEmpty(NombreUsuario)}", CommunityToolkit.Maui.Core.ToastDuration.Long, 16);
+            //msg.Show();
         }
+
+        if (e.PropertyName == nameof(EstadoNombreUsuario))
+        {
+            //var dd = EstadoNombreUsuario;
+        }
+
+        base.OnPropertyChanged(e);
     }
-
-    [RelayCommand]
-    private async Task SetModNC() => await Shell.Current.GoToAsync(nameof(PgModNC), true);
-
-    [RelayCommand]
-    private async Task Regresar()
-    {
-        await Shell.Current.GoToAsync($"..?{nameof(NombreUsuario)}={NombreUsuario}", true);
-    }
-
-
 }

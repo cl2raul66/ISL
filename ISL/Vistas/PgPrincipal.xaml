@@ -6,7 +6,6 @@
     xmlns:ctm="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:local="clr-namespace:ISL.Vistas"
     xmlns:modelos="clr-namespace:ISL.Modelos"
-    xmlns:utiles="clr-namespace:ISL.Utiles"
     xmlns:vm="clr-namespace:ISL.VistaModelos"
     Title="Principal"
     x:DataType="vm:PgPrincipalVistaModelo"
@@ -104,7 +103,7 @@
                     Aspect="Center"
                     Command="{Binding GoToAgregarActividadCommand}"
                     HeightRequest="42"
-                    IsEnabled="{Binding EnableAgregarActividad}"
+                    IsEnabled="{Binding ActividadesSemana, Mode=OneWay, Converter={ctm:IsListNotNullOrEmptyConverter}}"
                     Source="document_new.png"
                     WidthRequest="42" />
                 <ImageButton
@@ -160,25 +159,6 @@
             Command="{Binding GoToObservacionesCommand}"
             IsEnabled="{Binding EnableObservaciones, Mode=OneWay}"
             Text="Observaciones" />
-        <!--<VerticalStackLayout
-            Grid.Row="3"
-            Margin="8"
-            IsVisible="false"
-            Spacing="8">
-            <Line Style="{StaticResource Separador}" />
-            <Label Text="Establecer horario:" />
-            <Grid
-                ColumnDefinitions="*,*"
-                ColumnSpacing="8">
-                <Button
-                    Grid.Column="0"
-                    IsEnabled="False"
-                    Text="Entrada" />
-                <Button
-                    Grid.Column="1"
-                    Text="Salida" />
-            </Grid>
-        </VerticalStackLayout>-->
         <Grid
             Grid.Row="4"
             Style="{StaticResource FooterBar}">

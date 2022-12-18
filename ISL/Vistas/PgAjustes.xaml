@@ -8,9 +8,9 @@
     Title="Ajustes"
     x:DataType="vm:PgAjustesVistaModelo">
 
-    <Shell.BackButtonBehavior>
+    <!--<Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding RegresarCommand}" />
-    </Shell.BackButtonBehavior>
+    </Shell.BackButtonBehavior>-->
 
     <Grid RowDefinitions="*,auto">
         <TableView
@@ -26,48 +26,9 @@
                         DetailColor="{StaticResource SecundarioBg}"
                         Text="Nombre completo"
                         TextColor="{StaticResource Secundario}" />
-                    <!--<TextCell
-                        Detail="Estado: Sin establer, toque para modificar"
-                        DetailColor="{StaticResource SecundarioBg}"
-                        Text="Firma digital"
-                        TextColor="{StaticResource Secundario}" />-->
                 </TableSection>
             </TableRoot>
         </TableView>
-
-        <!--<VerticalStackLayout
-            Grid.Row="0"
-            Margin="8,0"
-            Spacing="8">
-            <Grid
-                Margin="8"
-                RowDefinitions="auto,auto,auto"
-                RowSpacing="8">
-                <Label
-                    Grid.Row="0"
-                    Style="{StaticResource HeaderCtrl}"
-                    Text="Firma digital:" />
-                <Frame
-                    Grid.Row="1"
-                    BackgroundColor="Transparent">
-                    <Image
-                        HeightRequest="200"
-                        WidthRequest="300" />
-                </Frame>
-                <Grid
-                    Grid.Row="2"
-                    ColumnDefinitions="*,*"
-                    ColumnSpacing="4">
-                    <Button
-                        Grid.Column="0"
-                        Text="Quitar" />
-                    <Button
-                        Grid.Column="1"
-                        Text="Agregar" />
-                </Grid>
-            </Grid>
-            <Line Style="{StaticResource Separador}" />
-        </VerticalStackLayout>-->
         <Grid
             Grid.Row="1"
             Style="{StaticResource FooterBar}">

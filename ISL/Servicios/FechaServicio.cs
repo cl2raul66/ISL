@@ -36,7 +36,19 @@ public class FechaServicio : IFechaServicio
     public DateTime Hoy => DateTime.Now;
     public DayOfWeek DowHoy => Hoy.DayOfWeek;
     public int NoSemanaDelAnio => gc.GetWeekOfYear(Hoy, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
-    public DateTime PrimerDia => gc.AddDays(Hoy, (int)DowHoy == 0 ? -6 : (int)DowHoy == 1 ? 0 : -1 * (int)DowHoy);
+    public DateTime PrimerDia
+    {
+        get
+        {
+            int d = (int)DowHoy;
+            if (d == 0)
+                return gc.AddDays(Hoy, -6);
+            else if (d == 1)
+                return Hoy;
+            else
+                return gc.AddDays(Hoy, -1 * (d - 1));
+        }
+    }
     public DateTime UltimoDia => gc.AddDays(Hoy, (int)DowHoy == 0 ? 0 : 7 - (int)DowHoy);
     public string DiaSemana(DateTime fecha) => dtfi.GetDayName(fecha.DayOfWeek);
     public string DiaSemanaIniciales(DateTime fecha) => dtfi.GetAbbreviatedDayName(fecha.DayOfWeek);

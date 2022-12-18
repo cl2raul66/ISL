@@ -3,53 +3,58 @@
     x:Class="ISL.Vistas.PgAgregarActividad"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
     xmlns:ctm="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:ISL.VistaModelos"
     Title="Agregar actividad"
     x:DataType="vm:PgAgregarActividadVistaModelo"
     Shell.NavBarIsVisible="False">
 
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding CancelarCommand}" />
-    </Shell.BackButtonBehavior>
+    <!--<Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding GuardarRegresarCommand}" />
+    </Shell.BackButtonBehavior>-->
 
-    <Grid RowDefinitions="auto,*,auto">
+    <Grid RowDefinitions="auto,auto,*,auto">
         <Grid
             Grid.Row="0"
             ColumnDefinitions="auto,*">
-            <Label
+            <HorizontalStackLayout
                 Grid.Column="0"
-                Padding="8,0"
-                FontSize="Title"
-                Text="Agregar actividad"
-                VerticalOptions="Center" />
+                Spacing="4">
+                <ImageButton
+                    Padding="4"
+                    Aspect="Center"
+                    Command="{Binding RegresarCommand}"
+                    HeightRequest="48"
+                    Source="application_exit.png"
+                    VerticalOptions="Center"
+                    WidthRequest="48" />
+                <Label
+                    Padding="0"
+                    FontSize="Title"
+                    Text="Agregar actividad"
+                    VerticalOptions="Center" />
+            </HorizontalStackLayout>
             <HorizontalStackLayout
                 Grid.Column="1"
-                Padding="8"
                 HorizontalOptions="EndAndExpand"
                 Spacing="4">
                 <ImageButton
                     Padding="4"
                     Aspect="Center"
-                    Command="{Binding GuardarCommand}"
-                    HeightRequest="42"
+                    Command="{Binding AgregarCommand}"
+                    HeightRequest="48"
                     IsEnabled="{Binding Actividad, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
                     Source="list_add.png"
-                    WidthRequest="42" />
+                    WidthRequest="48" />
                 <ImageButton
                     Padding="4"
                     Aspect="Center"
-                    HeightRequest="42"
-                    IsEnabled="False"
+                    Command="{Binding EliminarCommand}"
+                    HeightRequest="48"
+                    IsEnabled="{Binding CurrentActividad, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
                     Source="list_remove.png"
-                    WidthRequest="42" />
-                <!--<ImageButton
-                    x:Name="ImgBtnMas"
-                    Padding="0,4"
-                    Aspect="Center"
-                    HeightRequest="42"
-                    Source="list_drag_handle.png"
-                    WidthRequest="42" />-->
+                    WidthRequest="48" />
             </HorizontalStackLayout>
         </Grid>
         <VerticalStackLayout
@@ -59,7 +64,6 @@
             <Grid
                 Margin="8"
                 RowDefinitions="auto,auto"
-                IsVisible="{Binding TieneHorario, Mode=OneWay}"
                 RowSpacing="4">
                 <Label
                     Grid.Row="0"
@@ -85,7 +89,7 @@
                             BackgroundColor="Transparent"
                             BorderColor="{StaticResource SecundarioBg}"
                             CornerRadius="4">
-                            <TimePicker />
+                            <TimePicker Time="{Binding HEntrada, Mode=TwoWay}" />
                         </Frame>
                     </Grid>
                     <Grid
@@ -104,7 +108,7 @@
                             BackgroundColor="Transparent"
                             BorderColor="{StaticResource SecundarioBg}"
                             CornerRadius="4">
-                            <TimePicker />
+                            <TimePicker Time="{Binding HSalida, Mode=TwoWay}" />
                         </Frame>
                     </Grid>
                 </Grid>
@@ -124,40 +128,40 @@
                     BackgroundColor="Transparent"
                     BorderColor="{StaticResource SecundarioBg}"
                     CornerRadius="4">
-                    <Entry
-                        ClearButtonVisibility="WhileEditing"
+                    <Editor
                         HeightRequest="75"
                         IsSpellCheckEnabled="True"
+                        IsTextPredictionEnabled="True"
                         Keyboard="Text"
                         Placeholder="Requerido"
-                        Text="{Binding Actividad, Mode=OneWayToSource}"
+                        Text="{Binding Actividad, Mode=TwoWay}"
                         VerticalTextAlignment="Start" />
                 </Frame>
             </Grid>
             <Line Style="{StaticResource Separador}" />
-            <!--<Grid
-                ColumnDefinitions="*,*"
-                ColumnSpacing="8">
-                <Button
-                    Grid.Column="0"
-                    Command="{Binding CancelarCommand}"
-                    Text="Cancelar" />
-                <Button
-                    x:Name="BtnGuardar"
-                    Grid.Column="1"
-                    Command="{Binding GuardarCommand}"
-                    IsEnabled="{Binding EnableGuardar, Mode=OneWay}"
-                    Text="Guardar" />
-            </Grid>-->
         </VerticalStackLayout>
-        <Grid
+        <ScrollView
             Grid.Row="2"
+            VerticalScrollBarVisibility="Default">
+            <ListView
+                Margin="8"
+                ItemsSource="{Binding ListaActividad, Mode=OneWay}"
+                SelectedItem="{Binding CurrentActividad, Mode=TwoWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate
+                        x:Name="itm"
+                        x:DataType="x:String">
+                        <TextCell
+                            Text="{Binding}"
+                            TextColor="{StaticResource Secundario}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
+        <Grid
+            Grid.Row="3"
             Padding="8"
             Style="{StaticResource FooterBar}">
-            <!--<Label
-                Grid.Row="0"
-                Style="{StaticResource Autor}"
-                Text="Actividades del {0}" />-->
             <Label
                 Grid.Row="0"
                 Style="{StaticResource Autor}"

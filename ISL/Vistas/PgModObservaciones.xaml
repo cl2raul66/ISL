@@ -11,9 +11,9 @@
     BackgroundColor="#aa121212"
     Shell.PresentationMode="ModalAnimated">
 
-    <Shell.BackButtonBehavior>
+    <!--<Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding CancelarCommand}" />
-    </Shell.BackButtonBehavior>
+    </Shell.BackButtonBehavior>-->
 
     <Frame
         Margin="8"
@@ -40,14 +40,8 @@
                     BackgroundColor="Transparent"
                     BorderColor="{StaticResource SecundarioBg}"
                     CornerRadius="4">
-                    <Entry
-                        android:Entry.ImeOptions="Done"
-                        ctm:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference BtnGuardar}"
-                        ClearButtonVisibility="WhileEditing"
+                    <Editor
                         HeightRequest="100"
-                        IsSpellCheckEnabled="True"
-                        Keyboard="Text"
-                        ReturnCommand="{Binding GuardarCommand}"
                         Text="{Binding Observaciones, Mode=TwoWay}" />
                 </Frame>
             </Grid>
@@ -62,7 +56,7 @@
                     x:Name="BtnGuardar"
                     Grid.Column="1"
                     Command="{Binding GuardarCommand}"
-                    IsEnabled="{Binding EnableGuardar, Mode=OneWay}"
+                    IsEnabled="{Binding Observaciones, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
                     Text="Guardar" />
             </Grid>
         </VerticalStackLayout>

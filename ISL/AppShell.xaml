@@ -8,7 +8,7 @@
     Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
-        Title="Home"
+        Title="Principal"
         ContentTemplate="{DataTemplate v:PgPrincipal}"
         Route="PgPrincipal" />
 

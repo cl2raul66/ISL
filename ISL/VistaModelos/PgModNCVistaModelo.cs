@@ -6,28 +6,34 @@ namespace ISL.VistaModelos;
 public partial class PgModNCVistaModelo : ObservableObject
 {
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(GuardarCommand))]
+    [NotifyPropertyChangedFor(nameof(EnableGuardar))]
     private string nombreUsuario;
 
     public bool EnableGuardar => !string.IsNullOrEmpty(NombreUsuario);
 
-    [RelayCommand(CanExecute = nameof(EnableGuardar))]
+    [RelayCommand]
     private async Task Guardar()
-    {
-        if (EnableGuardar)
-        {
-            Preferences.Set(nameof(NombreUsuario), NombreUsuario.TrimEnd());
-            await Cancelar();
-        }
-        await Task.CompletedTask;
+    {        
+        Preferences.Set("Nombreusuario", nombreUsuario.Trim());
+        await Regresar();
     }
 
     [RelayCommand]
-    private async Task Cancelar()
+    private async Task Regresar()
     {
-        string locationShell = Shell.Current.CurrentState.Location.OriginalString;
-        int indexLocationShell = locationShell.LastIndexOf('/');
-        string Location = locationShell[..indexLocationShell];
-        await Shell.Current.GoToAsync($"{Location}?{nameof(NombreUsuario)}={NombreUsuario}", false);
+        string nu = Preferences.Get(nameof(NombreUsuario), string.Empty);
+
+        if (!string.IsNullOrEmpty(nombreUsuario))
+        {
+            await Shell.Current.GoToAsync("..", new Dictionary<string, object>() { { nameof(NombreUsuario), nombreUsuario } });
+        }
+        else if (!string.IsNullOrEmpty(nu))
+        {
+            await Shell.Current.GoToAsync("..", new Dictionary<string, object>() { { nameof(NombreUsuario), nu } });
+        }
+        else
+        {
+            await Shell.Current.GoToAsync("..");
+        }
     }
 }

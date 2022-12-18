@@ -18,19 +18,20 @@ public partial class PgPrincipal : ContentPage
     {
         List<string> opciones = new()
         {
-            nameof(PgAjustes)
+            "Ajustes"
         };
         if (!string.IsNullOrEmpty(_vm.NombreUsuario))
         {
-            opciones.Add(nameof(PgQrCode));
+            opciones.Add("Datos a código Qr");
         }
 
         var resul = await DisplayActionSheet("Ir a:", "Cancelar", null, opciones.ToArray());
         await _vm.VerObciones(resul);
     }
 
-    private void ImgBtnNuevo_Clicked(object sender, EventArgs e)
+    protected override void OnAppearing()
     {
-
+        _vm.LoadPgPrincipal();
+        base.OnAppearing();
     }
 }

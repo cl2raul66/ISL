@@ -8,13 +8,7 @@ public partial class PgAjustes : ContentPage
 	{
 		InitializeComponent();
 
-        //BindingContext = MauiProgram.CreateMauiApp().Services.GetService<PgAjustesVistaModelo>();
         BindingContext = vm;
-    }
-
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
-    {
-        base.OnNavigatedTo(args);
     }
 
     protected override bool OnBackButtonPressed()
@@ -22,10 +16,4 @@ public partial class PgAjustes : ContentPage
         return base.OnBackButtonPressed();
     }
 
-    private void SwitchCell_Disappearing(object sender, EventArgs e)
-    {
-
-    }
-
-    //override 
 }

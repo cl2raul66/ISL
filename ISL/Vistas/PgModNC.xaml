@@ -11,10 +11,6 @@
     BackgroundColor="#aa121212"
     Shell.PresentationMode="ModalAnimated">
 
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding CancelarCommand}" />
-    </Shell.BackButtonBehavior>
-
     <Frame
         Margin="8"
         BackgroundColor="{StaticResource PrincipalBg}"
@@ -56,7 +52,7 @@
                 ColumnSpacing="8">
                 <Button
                     Grid.Column="0"
-                    Command="{Binding CancelarCommand}"
+                    Command="{Binding RegresarCommand}"
                     Text="Cancelar" />
                 <Button
                     x:Name="BtnGuardar"
