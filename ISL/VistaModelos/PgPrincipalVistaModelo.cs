@@ -11,22 +11,21 @@ namespace ISL.VistaModelos;
 
 public partial class PgPrincipalVistaModelo : ObservableObject
 {
-    private readonly ILocalBdServicio localBd;
-    private readonly IFechaServicio fechaSer;
-    private ExpedienteLocal ExpedienteActual;
+    private readonly IExpedienteLocalServicio expLocalServ;
+    private readonly IFechaServicio fechaServ;
+    private ExpedienteLocal expLocal;
 
-    public PgPrincipalVistaModelo(ILocalBdServicio localBdServicio, IFechaServicio fechaServicio)
+    public PgPrincipalVistaModelo(IFechaServicio fechaServicio, IExpedienteLocalServicio expedienteLocalServicio)
     {
-        localBd = localBdServicio;
-        fechaSer = fechaServicio;
-        ExpedienteActual = localBd.GetByNoSemana(fechaSer.NoSemanaDelAnio);
+        fechaServ = fechaServicio;
+        expLocalServ = expedienteLocalServicio;
     }
 
     [ObservableProperty]
-    private ObservableCollection<ActividadDiaria> actividadesSemana;
+    private ObservableCollection<LaborView> actividadesSemana = new();
 
     [ObservableProperty]
-    private ActividadDiaria selectedActividadesSemana;
+    private LaborView selectedActividadesSemana;
 
     [ObservableProperty]
     private ObservableCollection<MensajeItem> notificaciones = new();
@@ -53,7 +52,16 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     private async Task GoToAjustes() => await Shell.Current.GoToAsync(nameof(PgAjustes), new Dictionary<string, object>() { { nameof(NombreUsuario), NombreUsuario } });
 
     [RelayCommand]
-    public async Task GoToAgregarActividad() => await Shell.Current.GoToAsync(nameof(PgAgregarActividad), new Dictionary<string, object>() { { "ad", selectedActividadesSemana } });
+    public async Task GoToAgregarActividad()
+    {
+        var l = expLocal.LaboresPorDia.Where(x => x.Key.Date == Convert.ToDateTime(SelectedActividadesSemana.Dia.ToString())).FirstOrDefault().Value;
+        var param = new Dictionary<string, object>() { { "fecha", SelectedActividadesSemana.Dia } };
+        if (l is not null)
+        {
+            param.Add("labores", l);
+        }
+        await Shell.Current.GoToAsync(nameof(PgAgregarActividad), param);
+    }
 
     [RelayCommand]
     public async Task GoToObservaciones() => await Shell.Current.GoToAsync(nameof(PgModObservaciones));
@@ -87,27 +95,11 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     {
         if (e.PropertyName == nameof(NombreUsuario))
         {
-            //if (string.IsNullOrEmpty(nombreUsuario))
-            //{
-            //    Notificaciones.Add(new(2, "No hay usuario registrado, en Ajustes puede solucionar este problema.", MensajeTipo.Precaucion));
-            //}
-            //else if (notificaciones.Any())
-            //{
-            //    var msg = notificaciones.FirstOrDefault(x => x.Id == 2);
-            //    Notificaciones.Remove(msg);
-            //}
-            //OrdenarNotificaciones();
             EnableObservaciones = !string.IsNullOrEmpty(nombreUsuario);
             EnableQrCode = !string.IsNullOrEmpty(nombreUsuario);
-            FechaHoy = string.IsNullOrEmpty(nombreUsuario) ? string.Empty : fechaSer.Hoy.ToString("D");
-            SemanaActual = string.IsNullOrEmpty(nombreUsuario) ? string.Empty : $"Semana: {fechaSer.NoSemanaDelAnio} del {fechaSer.PrimerDia.ToShortDateString()} al {fechaSer.UltimoDia.ToShortDateString()}";
+            //FechaHoy = string.IsNullOrEmpty(nombreUsuario) ? string.Empty : fechaServ.Hoy.ToString("D");
+            SemanaActual = string.IsNullOrEmpty(nombreUsuario) ? string.Empty : $"Semana: {fechaServ.NoSemanaDelAnio} del {fechaServ.PrimerDia.ToShortDateString()} al {fechaServ.UltimoDia.ToShortDateString()}";
         }
-
-        //if (e.PropertyName == nameof(ActividadesSemana))
-        //{
-        //    EnableAgregarActividad = actividadesSemana is not null;
-        //}
-
         if (e.PropertyName == nameof(SelectedActividadesSemana))
         {
             var ss = selectedActividadesSemana;
@@ -137,54 +129,66 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     public void LoadPgPrincipal()
     {
         NombreUsuario = Preferences.Get("Nombreusuario", string.Empty);
-        ActividadesSemana = ExpedienteActual is not null ? new(ExpedienteActual.Labores) : new();
 
         Notificaciones.Clear();
-        if (!localBd.ExisteBd)
+        if (!expLocalServ.ExisteBd)
         {
             Notificaciones.Add(new(0, "Sea bienvenido a Informe Semanal de Labores (ISL), ingrese los datos requeridos para poder usar esta aplicación. Gracias.", MensajeTipo.Informacion));
         }
 
-        if (!localBd.ExisteDatos)
+        if (!expLocalServ.ExisteDatos)
         {
             Notificaciones.Add(new(1, "No existen datos, en Ajustes configure los requeridos.", MensajeTipo.Precaucion));
         }
-        NotificarUsuario();
-        SetCurrentSemana();
-        OrdenarNotificaciones();
-    }
 
-    private void SetCurrentSemana()
-    {        
-        //if (ExpedienteActual?.Labores?.Any() ?? false )
-        //{
-        //    foreach (var item in ExpedienteActual.Labores)
-        //    {
-        //        ActividadesSemana.Add(new(item.Fecha, item.HorarioEntrada, item.HorarioSalida, item.Actividades));
-        //    }
-        //}
-        //else
         if (!string.IsNullOrEmpty(nombreUsuario))
         {
-            ActividadesSemana = new() {
-                new(fechaSer.PrimerDia,null,null,null),
-                new(fechaSer.PrimerDia.AddDays(1),null,null,null),
-                new(fechaSer.PrimerDia.AddDays(2),null,null,null),
-                new(fechaSer.PrimerDia.AddDays(3),null,null,null),
-                new(fechaSer.PrimerDia.AddDays(4),null,null,null),
-                new(fechaSer.PrimerDia.AddDays(5),null,null,null),
-                new(fechaSer.UltimoDia,null,null,null)
-            };
+            if (!expLocalServ.ExisteDatos)
+            {
+                expLocalServ.NuevaSemana(fechaServ.NoSemanaDelAnio);
+            }
 
-            ExpedienteLocal newExpediente = new(ExpedienteActual?.NoSemana ?? fechaSer.NoSemanaDelAnio, actividadesSemana.ToList());
+            expLocal = expLocalServ.GetSemana(fechaServ.NoSemanaDelAnio);
+            FechaHoy = fechaServ.Hoy.ToString("D");
+            SemanaActual = $"Semana: {fechaServ.NoSemanaDelAnio} del {fechaServ.PrimerDia.ToShortDateString()} al {fechaServ.UltimoDia.ToShortDateString()}";
 
-            localBd.Upsert(newExpediente);
+            foreach (var item in expLocal.LaboresPorDia)
+            {
+                ActividadesSemana.Add(
+                    new LaborView()
+                    {
+                        Dia = DateOnly.FromDateTime(item.Key),
+                        HorarioEntrada = item.Value?.HorarioEntrada is null ? null : TimeOnly.FromDateTime(item.Value.HorarioEntrada.Value),
+                        HorarioSalida = item.Value?.HorarioSalida is null ? null : TimeOnly.FromDateTime(item.Value.HorarioSalida.Value),
+                        NoActividades = item.Value?.Actividades?.Any() ?? false ? item.Value.Actividades.Count > 1 ? $"{item.Value.Actividades.Count} Actividades" : $"Una actividad" : "No hay actividades"
+                    }
+                );
+            }
         }
 
         if (actividadesSemana.Any())
         {
-            SelectedActividadesSemana = actividadesSemana[(int)fechaSer.DowHoy == 0 ? 6 : (int)fechaSer.DowHoy - 1];
+            SelectedActividadesSemana = actividadesSemana.Where(x => x.Dia == fechaServ.HoyFecha).FirstOrDefault();
         }
+        NotificarUsuario();
+        //SetCurrentSemana();
+        OrdenarNotificaciones();
     }
+
+    //private void SetCurrentSemana()
+    //{
+    //    if (!string.IsNullOrEmpty(nombreUsuario))
+    //    {
+    //        foreach (string diaSemanaIniciales in fechaServ.DiasFechas.Keys)
+    //        {
+    //            ActividadesSemana.Add(new() { DiaSemanaIniciales = diaSemanaIniciales });
+    //        }
+    //    }
+
+    //    if (actividadesSemana.Any())
+    //    {
+    //        SelectedActividadesSemana = actividadesSemana[(int)fechaServ.DowHoy == 0 ? 6 : (int)fechaServ.DowHoy - 1];
+    //    }
+    //}
     #endregion
 }

@@ -2,23 +2,23 @@
 using CommunityToolkit.Mvvm.Input;
 using ISL.Modelos;
 using ISL.Servicios;
+using Microsoft.Maui.Platform;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace ISL.VistaModelos;
 
-[QueryProperty(nameof(SelectedActividadesSemana), "ad")]
+[QueryProperty(nameof(Dia), "fecha")]
+[QueryProperty(nameof(LaborDia), "labores")]
 public partial class PgAgregarActividadVistaModelo : ObservableObject
 {
-    private readonly ILocalBdServicio localBd;
+    private readonly IExpedienteLocalServicio expLocalServ;
     private readonly IFechaServicio fechaSer;
-    private readonly ExpedienteLocal ExpedienteActual;
 
-    public PgAgregarActividadVistaModelo(ILocalBdServicio localBdServicio, IFechaServicio fechaServicio)
+    public PgAgregarActividadVistaModelo(IExpedienteLocalServicio expedienteLocalServicio, IFechaServicio fechaServicio)
     {
-        localBd = localBdServicio;
+        expLocalServ = expedienteLocalServicio;
         fechaSer = fechaServicio;
-        ExpedienteActual = localBd.GetByNoSemana(fechaSer.NoSemanaDelAnio);
     }
 
     [ObservableProperty]
@@ -37,39 +37,27 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
     private string currentActividad;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(SelectedDia))]
-    private ActividadDiaria selectedActividadesSemana;
+    private DateOnly dia;
 
-    public string SelectedDia => SelectedActividadesSemana?.Fecha is null ? "no hay días" : fechaSer.DiaSemana((DateTime)SelectedActividadesSemana.Fecha);
+    [ObservableProperty]
+    private Labor laborDia;
+
+    public string SelectedDia => fechaSer.DiaSemana(dia);
 
     [RelayCommand]
     private async Task Regresar()
     {
         if (listaActividad.Any())
         {
-            ActividadDiaria newActividad = new(selectedActividadesSemana.Fecha, Convert.ToDateTime(hEntrada.ToString()), Convert.ToDateTime(hSalida.ToString()), listaActividad.ToList());
-            List<ActividadDiaria> newLabores = ExpedienteActual?.Labores?? new();
-            ActividadDiaria deleteActividad = newLabores.Where(x => x.Fecha.ToString() == selectedActividadesSemana.Fecha.ToString()).FirstOrDefault();
 
-            int indexLabor = newLabores.IndexOf(deleteActividad);
-            if (indexLabor > -1)
-            {
-                newLabores.Remove(deleteActividad);
-                newLabores.Insert(indexLabor, newActividad);
-            }
-            else
-            {
-                newLabores.Add(newActividad);
-            }
-            
-            ExpedienteLocal newExpediente = new(ExpedienteActual.NoSemana, newLabores);
-
-            localBd.Upsert(newExpediente);
         }
-        else
+#if ANDROID
+        if (Platform.CurrentActivity.CurrentFocus != null)
         {
-            await Shell.Current.GoToAsync("..");
+            Platform.CurrentActivity.HideKeyboard(Platform.CurrentActivity.CurrentFocus);
         }
+#endif
+        await Shell.Current.GoToAsync("..");
     }
 
     [RelayCommand]
@@ -90,15 +78,15 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
     #region Extra
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(SelectedActividadesSemana))
+        if (e.PropertyName == nameof(Dia))
         {
-            if (selectedActividadesSemana?.Actividades?.Any() ?? false)
+            if (laborDia?.Actividades?.Any() ?? false)
             {
-                ListaActividad = new(selectedActividadesSemana.Actividades);
+                ListaActividad = new(laborDia.Actividades);
             }
 
-            HEntrada = selectedActividadesSemana?.HorarioEntrada?.TimeOfDay ?? new TimeSpan(7, 0, 0);
-            HSalida = selectedActividadesSemana?.HorarioSalida?.TimeOfDay ?? new TimeSpan(17, 0, 0);
+            HEntrada = laborDia?.HorarioEntrada is null ? new TimeSpan(7, 0, 0) : TimeSpan.FromTicks(laborDia.HorarioEntrada.Value.Ticks);
+            HSalida = laborDia?.HorarioSalida?.TimeOfDay is null ? new TimeSpan(17, 0, 0) : TimeSpan.FromTicks(laborDia.HorarioSalida.Value.Ticks);
         }
 
         base.OnPropertyChanged(e);

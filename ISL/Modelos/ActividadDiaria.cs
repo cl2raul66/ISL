@@ -1,4 +1,6 @@
-﻿namespace ISL.Modelos;
+﻿using LiteDB;
+
+namespace ISL.Modelos;
 
 //public class ActividadDiaria
 //{
@@ -13,18 +15,17 @@
 
 public class ActividadDiaria
 {
-    public DateTime? Fecha { set; get; }
-    public DateTime? HorarioEntrada { set; get; }
-    public DateTime? HorarioSalida { set; get; }
+    public ObjectId Id { get; set; }
+    public long Fecha { set; get; }
+    public long HorarioEntrada { set; get; }
+    public long HorarioSalida { set; get; }
     public List<string> Actividades { set; get; }
+}
 
-    public ActividadDiaria() { }
-
-    public ActividadDiaria(DateTime? fecha, DateTime? horarioEntrada, DateTime? horarioSalida, List<string> actividades)
-    {
-        Fecha = fecha;
-        HorarioEntrada = horarioEntrada;
-        HorarioSalida = horarioSalida;
-        Actividades = actividades;
-    }
+public class ActDiaView
+{
+    public string DiaSemanaIniciales { set; get; }
+    public string HorarioEntrada { set; get; }
+    public string HorarioSalida { set; get; }
+    public string Actividades { set; get; }
 }

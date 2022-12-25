@@ -39,7 +39,7 @@
 
             <DataTemplate
                 x:Key="ActividadesSemanaDataTemplate"
-                x:DataType="modelos:ActividadDiaria">
+                x:DataType="modelos:LaborView">
                 <Frame
                     x:Name="FItem"
                     Margin="0,0,0,8"
@@ -55,13 +55,13 @@
                             <Label
                                 x:Name="LSemana"
                                 Style="{StaticResource LabelSemana}"
-                                Text="{Binding Fecha, Mode=OneWay, Converter={StaticResource DateTimeToDiaSemanaIniciales}}" />
+                                Text="{Binding Dia, Mode=OneWay, Converter={StaticResource FechaToDiaSemanaIniciales}}" />
                         </Frame>
                         <Label
                             x:Name="LTextoItem"
                             Grid.Column="1"
                             Style="{StaticResource LabelTextoItem}"
-                            Text="{Binding Actividades, Mode=OneWay, TargetNullValue='No laborado'}"
+                            Text="{Binding NoActividades, Mode=OneWay}"
                             TextColor="{StaticResource Principal}" />
                         <Label
                             x:Name="LHorarioItem"
@@ -103,7 +103,7 @@
                     Aspect="Center"
                     Command="{Binding GoToAgregarActividadCommand}"
                     HeightRequest="42"
-                    IsEnabled="{Binding ActividadesSemana, Mode=OneWay, Converter={ctm:IsListNotNullOrEmptyConverter}}"
+                    IsEnabled="{Binding SelectedActividadesSemana, Mode=OneWay, Converter={ctm:IsNotNullConverter}}"
                     Source="document_new.png"
                     WidthRequest="42" />
                 <ImageButton

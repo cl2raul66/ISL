@@ -1,7 +1,4 @@
-using Android.Widget;
 using ISL.VistaModelos;
-using Microsoft.Maui.Platform;
-using AView = Android.Views.View;
 
 namespace ISL.Vistas;
 

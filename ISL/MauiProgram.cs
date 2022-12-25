@@ -3,7 +3,6 @@ using ISL.Servicios;
 using ISL.VistaModelos;
 using ISL.Vistas;
 using ZXing.Net.Maui;
-using Microsoft.Maui.ApplicationModel.DataTransfer;
 
 namespace ISL;
 
@@ -21,8 +20,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
         builder.UseBarcodeReader();
-        builder.Services.AddSingleton<ILocalBdServicio, LocalBdServicio>();
-        //builder.Services.AddSingleton<ITransitoriaBdServicio, TransitoriaBdServicio>();
+        builder.Services.AddSingleton<IExpedienteLocalServicio, ExpedienteLocalServicio>();
         builder.Services.AddSingleton<IFechaServicio, FechaServicio>();
         builder.Services.AddTransient<PgPrincipalVistaModelo>();
         builder.Services.AddTransient<PgAjustesVistaModelo>();
