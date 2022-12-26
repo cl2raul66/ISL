@@ -70,9 +70,9 @@
                             TextColor="{StaticResource Principal}">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="{Binding HorarioEntrada, Mode=OneWay}" />
+                                    <Span Text="{Binding HorarioEntrada, Mode=OneWay, Converter={StaticResource TimeOnlyToStringView}}" />
                                     <Span Text=" &#10;" />
-                                    <Span Text="{Binding HorarioSalida, Mode=OneWay}" />
+                                    <Span Text="{Binding HorarioSalida, Mode=OneWay, Converter={StaticResource TimeOnlyToStringView}}" />
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>

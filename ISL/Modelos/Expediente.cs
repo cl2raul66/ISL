@@ -19,13 +19,7 @@ public class Expediente
 }
 
 public class ExpedienteLocal
-{    
-    public int NoSemana { get; set; }
+{
+    public int Id { get; set; }
     public Dictionary<DateTime, Labor> LaboresPorDia { get; set; }
-}
-
-public class ExpedienteLocalView
-{    
-    public int NoSemana { get; set; }
-    public Dictionary<DateOnly, Labor> LaboresPorDia { get; set; }
 }

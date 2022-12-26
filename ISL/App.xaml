@@ -23,6 +23,7 @@
             <cvt:MensajeTipoToBacgrundColorConverter x:Key="MensajeTipoToBacgrundColor" />
             <cvt:FechaToDiaSemanaInicialesConverter x:Key="FechaToDiaSemanaIniciales" />
             <cvt:DateTimeToDiaSemanaConverter x:Key="DateTimeToDiaSemana" />
+            <cvt:TimeOnlyToStringViewConverter x:Key="TimeOnlyToStringView" />
 
             <Style TargetType="TextCell">
                 <Setter Property="TextColor" Value="{StaticResource Secundario}" />

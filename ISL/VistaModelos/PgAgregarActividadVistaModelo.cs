@@ -47,10 +47,17 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
     [RelayCommand]
     private async Task Regresar()
     {
+        if (laborDia is null)
+        {
+            laborDia = new();
+        }
+        laborDia.HorarioEntrada = new(dia.Year, dia.Month, dia.Day, hEntrada.Hours, hEntrada.Minutes, hEntrada.Seconds);
+        laborDia.HorarioSalida = new(dia.Year, dia.Month, dia.Day, hSalida.Hours, hSalida.Minutes, hSalida.Seconds);
         if (listaActividad.Any())
         {
-
+            laborDia.Actividades = listaActividad.ToList();
         }
+        expLocalServ.AgregarLabores(laborDia);
 #if ANDROID
         if (Platform.CurrentActivity.CurrentFocus != null)
         {
@@ -80,15 +87,29 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
     {
         if (e.PropertyName == nameof(Dia))
         {
+
+        }
+        
+        if (e.PropertyName == nameof(HEntrada))
+        {
+            
+        }
+        
+        if (e.PropertyName == nameof(HSalida))
+        {
+            
+        }
+
+        if (e.PropertyName == nameof(LaborDia))
+        {
             if (laborDia?.Actividades?.Any() ?? false)
             {
                 ListaActividad = new(laborDia.Actividades);
             }
 
-            HEntrada = laborDia?.HorarioEntrada is null ? new TimeSpan(7, 0, 0) : TimeSpan.FromTicks(laborDia.HorarioEntrada.Value.Ticks);
-            HSalida = laborDia?.HorarioSalida?.TimeOfDay is null ? new TimeSpan(17, 0, 0) : TimeSpan.FromTicks(laborDia.HorarioSalida.Value.Ticks);
+            HEntrada = laborDia?.HorarioEntrada is null ? new TimeSpan(7, 0, 0) : new TimeSpan(laborDia.HorarioEntrada.Value.Hour, laborDia.HorarioEntrada.Value.Minute, laborDia.HorarioEntrada.Value.Second);
+            HSalida = laborDia?.HorarioSalida?.TimeOfDay is null ? new TimeSpan(17, 0, 0) : new TimeSpan(laborDia.HorarioSalida.Value.Hour, laborDia.HorarioSalida.Value.Minute, laborDia.HorarioSalida.Value.Second);
         }
-
         base.OnPropertyChanged(e);
     }
     #endregion

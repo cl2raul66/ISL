@@ -8,16 +8,17 @@ public interface IFechaServicio
     DayOfWeek DowHoy { get; }
     DateTime Hoy { get; }
     DateOnly HoyFecha { get; }
-    int NoSemanaDelAnio { get; }
     DateTime PrimerDia { get; }
     DateTime UltimoDia { get; }
 
-    string DiaSemana(DateTime fecha);
+    DateTime DateStringToDateTime(string fecha);
+    string DateTimeToDateString(DateTime fecha);
+    string DateTimeToTimeString(DateTime hora);
     string DiaSemana(DateOnly fecha);
-    string DiaSemanaIniciales(DateTime fecha);
+    string DiaSemana(DateTime fecha);
     string DiaSemanaIniciales(DateOnly fecha);
-    //string HoraToString(long horario);
-    //string LongToFechaString(long fecha);
+    string DiaSemanaIniciales(DateTime fecha);
+    int NoSemanaDelAnio(DateTime? fecha = null);
 }
 
 public class FechaServicio : IFechaServicio
@@ -40,10 +41,21 @@ public class FechaServicio : IFechaServicio
         };
     }
 
-    public DateTime Hoy => DateTime.Now;
+    public DateTime Hoy
+    {
+        get
+        {
+            var hoy = DateTime.Now;
+            return new(hoy.Year, hoy.Month, hoy.Day);
+        }
+    }
     public DateOnly HoyFecha => DateOnly.FromDateTime(Hoy);
     public DayOfWeek DowHoy => Hoy.DayOfWeek;
-    public int NoSemanaDelAnio => gc.GetWeekOfYear(Hoy, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
+    public int NoSemanaDelAnio(DateTime? fecha = null) => fecha switch
+    {
+        null => gc.GetWeekOfYear(Hoy, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday),
+        _ => gc.GetWeekOfYear(fecha.Value, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday)
+    };
     public DateTime PrimerDia
     {
         get
@@ -73,7 +85,10 @@ public class FechaServicio : IFechaServicio
     };
 
     #region Útiles
-    //public string HoraToString(long horario) => new DateTime(horario).ToString("t");
-    //public string LongToFechaString(long fecha) => new DateTime(fecha).ToString("dd/MM/yyyy");
+    public string DateTimeToDateString(DateTime fecha) => fecha.ToString("yyyyMMdd");
+    public string DateTimeToTimeString(DateTime hora) => hora.ToString("t");
+    public DateTime DateStringToDateTime(string fecha) => new(int.Parse(fecha[..4]), int.Parse(fecha[4..6]), int.Parse(fecha[6..]));
+    //public string HoraToString(DateTime horario) => horario.ToString("t");
+    //public string ToDateStringView(DateTime fecha) => fecha.ToString("dd/MM/yyyy");
     #endregion
 }

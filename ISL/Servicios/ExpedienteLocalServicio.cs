@@ -8,6 +8,7 @@ public interface IExpedienteLocalServicio
     bool ExisteBd { get; }
     bool ExisteDatos { get; }
 
+    bool AgregarLabores(Labor entity);
     ExpedienteLocal GetSemana(int noSemana);
     bool NuevaSemana(int noSemana);
 }
@@ -30,21 +31,19 @@ public class ExpedienteLocalServicio : IExpedienteLocalServicio
 
         collection = db.GetCollection<ExpedienteLocal>();
         ExisteBd = db.CollectionExists(nameof(ExpedienteLocal));
-        ExisteDatos = collection.LongCount() > 0;
-        collection.EnsureIndex(x => x.NoSemana);
     }
 
     public bool ExisteBd { private set; get; }
 
-    public bool ExisteDatos { private set; get; }
+    public bool ExisteDatos => collection.LongCount() > 0;
 
-    public ExpedienteLocal GetSemana(int noSemana) => collection.FindOne(x => x.NoSemana == noSemana);
+    public ExpedienteLocal GetSemana(int noSemana) => collection.FindById(noSemana);
 
     public bool NuevaSemana(int noSemana)
     {
         ExpedienteLocal entity = new()
         {
-            NoSemana = noSemana,
+            Id = noSemana,
             LaboresPorDia = new()
             {
                 {fechaServ.PrimerDia, null },
@@ -57,5 +56,12 @@ public class ExpedienteLocalServicio : IExpedienteLocalServicio
             }
         };
         return collection.Insert(entity) is not null;
+    }
+
+    public bool AgregarLabores(Labor entity)
+    {
+        var expediente = GetSemana(fechaServ.NoSemanaDelAnio(entity.HorarioEntrada));
+        expediente.LaboresPorDia[entity.HorarioEntrada.Value.Date] = entity;
+        return collection.Update(expediente.Id, expediente);
     }
 }

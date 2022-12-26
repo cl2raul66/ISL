@@ -58,7 +58,7 @@ public partial class PgPrincipalVistaModelo : ObservableObject
         var param = new Dictionary<string, object>() { { "fecha", SelectedActividadesSemana.Dia } };
         if (l is not null)
         {
-            param.Add("labores", l);
+            param.Add("labores", l as Labor);
         }
         await Shell.Current.GoToAsync(nameof(PgAgregarActividad), param);
     }
@@ -145,13 +145,14 @@ public partial class PgPrincipalVistaModelo : ObservableObject
         {
             if (!expLocalServ.ExisteDatos)
             {
-                expLocalServ.NuevaSemana(fechaServ.NoSemanaDelAnio);
+                expLocalServ.NuevaSemana(fechaServ.NoSemanaDelAnio());
             }
 
-            expLocal = expLocalServ.GetSemana(fechaServ.NoSemanaDelAnio);
+            expLocal = expLocalServ.GetSemana(fechaServ.NoSemanaDelAnio());
             FechaHoy = fechaServ.Hoy.ToString("D");
-            SemanaActual = $"Semana: {fechaServ.NoSemanaDelAnio} del {fechaServ.PrimerDia.ToShortDateString()} al {fechaServ.UltimoDia.ToShortDateString()}";
+            SemanaActual = $"Semana: {fechaServ.NoSemanaDelAnio()} del {fechaServ.PrimerDia.ToShortDateString()} al {fechaServ.UltimoDia.ToShortDateString()}";
 
+            ActividadesSemana.Clear();
             foreach (var item in expLocal.LaboresPorDia)
             {
                 ActividadesSemana.Add(
