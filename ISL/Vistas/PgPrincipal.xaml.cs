@@ -23,6 +23,7 @@ public partial class PgPrincipal : ContentPage
         if (!string.IsNullOrEmpty(_vm.NombreUsuario))
         {
             opciones.Add("Datos a código Qr");
+            opciones.Add("Generar ISL");
         }
 
         var resul = await DisplayActionSheet("Ir a:", "Cancelar", null, opciones.ToArray());

@@ -6,6 +6,7 @@ using System.ComponentModel;
 namespace ISL.VistaModelos;
 
 [QueryProperty(nameof(NombreUsuario), nameof(NombreUsuario))]
+[QueryProperty(nameof(VerDoc), "verDoc")]
 public partial class PgAjustesVistaModelo : ObservableObject
 {
     [ObservableProperty]
@@ -14,8 +15,21 @@ public partial class PgAjustesVistaModelo : ObservableObject
 
     public string EstadoNombreUsuario => string.IsNullOrEmpty(NombreUsuario) ? "Sin establecer" : "Establecido";
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(EstadoAbrirDoc))]
+    private bool verDoc;
+
+    public string EstadoAbrirDoc => verDoc ? "Lanzar documento" : "No lanzar documento";
+
     [RelayCommand]
     private async Task SetModNC() => await Shell.Current.GoToAsync(nameof(PgModNC));
+
+    [RelayCommand]
+    private void SetModAD()
+    {
+        Preferences.Set("verDoc", !verDoc);
+        VerDoc = Preferences.Get("verDoc", false);
+    }
 
     [RelayCommand]
     private async Task Regresar() => await Shell.Current.GoToAsync("..");

@@ -1,14 +1,13 @@
+using ISL.VistaModelos;
+
 namespace ISL.Vistas;
 
 public partial class PgQrCode : ContentPage
 {
-	public PgQrCode()
-	{
-		InitializeComponent();
-	}
+    public PgQrCode(PgQrCodeVistaModelo vm)
+    {
+        InitializeComponent();
 
-	protected override void OnNavigatedTo(NavigatedToEventArgs args)
-	{
-		base.OnNavigatedTo(args);
-	}
+        BindingContext = vm;
+    }
 }

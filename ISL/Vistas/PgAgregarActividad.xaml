@@ -7,7 +7,8 @@
     xmlns:ctm="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:ISL.VistaModelos"
     Title="Agregar actividad"
-    x:DataType="vm:PgAgregarActividadVistaModelo">
+    x:DataType="vm:PgAgregarActividadVistaModelo"
+    Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="auto,auto,*,auto">
         <Grid
@@ -15,15 +16,16 @@
             ColumnDefinitions="auto,*">
             <HorizontalStackLayout
                 Grid.Column="0"
+                Padding="8"
                 Spacing="4">
                 <ImageButton
                     Padding="4"
                     Aspect="Center"
                     Command="{Binding RegresarCommand}"
-                    HeightRequest="48"
+                    HeightRequest="42"
                     Source="application_exit.png"
                     VerticalOptions="Center"
-                    WidthRequest="48" />
+                    WidthRequest="42" />
                 <Label
                     Padding="0"
                     FontSize="Title"
@@ -32,24 +34,25 @@
             </HorizontalStackLayout>
             <HorizontalStackLayout
                 Grid.Column="1"
+                Padding="8"
                 HorizontalOptions="EndAndExpand"
                 Spacing="4">
                 <ImageButton
                     Padding="4"
                     Aspect="Center"
                     Command="{Binding AgregarCommand}"
-                    HeightRequest="48"
+                    HeightRequest="42"
                     IsEnabled="{Binding Actividad, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
                     Source="list_add.png"
-                    WidthRequest="48" />
+                    WidthRequest="42" />
                 <ImageButton
                     Padding="4"
                     Aspect="Center"
                     Command="{Binding EliminarCommand}"
-                    HeightRequest="48"
+                    HeightRequest="42"
                     IsEnabled="{Binding CurrentActividad, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
                     Source="list_remove.png"
-                    WidthRequest="48" />
+                    WidthRequest="42" />
             </HorizontalStackLayout>
         </Grid>
         <VerticalStackLayout

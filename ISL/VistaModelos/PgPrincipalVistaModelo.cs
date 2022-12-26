@@ -13,12 +13,14 @@ public partial class PgPrincipalVistaModelo : ObservableObject
 {
     private readonly IExpedienteLocalServicio expLocalServ;
     private readonly IFechaServicio fechaServ;
+    private readonly IGenerarDocServicio generarDocServ;
     private ExpedienteLocal expLocal;
 
-    public PgPrincipalVistaModelo(IFechaServicio fechaServicio, IExpedienteLocalServicio expedienteLocalServicio)
+    public PgPrincipalVistaModelo(IFechaServicio fechaServicio, IExpedienteLocalServicio expedienteLocalServicio, IGenerarDocServicio generarDocServicio)
     {
         fechaServ = fechaServicio;
         expLocalServ = expedienteLocalServicio;
+        generarDocServ = generarDocServicio;
     }
 
     [ObservableProperty]
@@ -46,10 +48,16 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     private bool enableObservaciones;
 
     [RelayCommand]
-    private async Task GoToQrCode() => await Shell.Current.GoToAsync(nameof(PgQrCode));
+    private async Task GoToQrCode() => await Shell.Current.GoToAsync(nameof(PgQrCode), new Dictionary<string, object>()
+    {
+        {"exp", new Expediente(){ Usuario=nombreUsuario, NoSemana= expLocal.Id, Observaciones=Preferences.Get("Obs", string.Empty), LaboresPorDia=expLocal.LaboresPorDia.Values.ToList()} }
+    });
 
     [RelayCommand]
-    private async Task GoToAjustes() => await Shell.Current.GoToAsync(nameof(PgAjustes), new Dictionary<string, object>() { { nameof(NombreUsuario), NombreUsuario } });
+    private async Task GoToAjustes() => await Shell.Current.GoToAsync(nameof(PgAjustes), new Dictionary<string, object>() { 
+        { nameof(NombreUsuario), NombreUsuario },
+        { "verDoc", Preferences.Get("verDoc", false) },
+    });
 
     [RelayCommand]
     public async Task GoToAgregarActividad()
@@ -58,7 +66,7 @@ public partial class PgPrincipalVistaModelo : ObservableObject
         var param = new Dictionary<string, object>() { { "fecha", SelectedActividadesSemana.Dia } };
         if (l is not null)
         {
-            param.Add("labores", l as Labor);
+            param.Add("labores", l);
         }
         await Shell.Current.GoToAsync(nameof(PgAgregarActividad), param);
     }
@@ -69,6 +77,7 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     [RelayCommand]
     public Task VerObciones(string page) => page switch
     {
+        "Generar ISL" => generarDocServ.Crear(new Expediente() { Usuario = nombreUsuario, NoSemana = expLocal.Id, Observaciones = Preferences.Get("Obs", string.Empty), LaboresPorDia = expLocal.LaboresPorDia.Values.ToList() }),
         "Datos a código Qr" => GoToQrCode(),
         "Ajustes" => GoToAjustes(),
         _ => Task.CompletedTask
@@ -98,7 +107,7 @@ public partial class PgPrincipalVistaModelo : ObservableObject
             EnableObservaciones = !string.IsNullOrEmpty(nombreUsuario);
             EnableQrCode = !string.IsNullOrEmpty(nombreUsuario);
             //FechaHoy = string.IsNullOrEmpty(nombreUsuario) ? string.Empty : fechaServ.Hoy.ToString("D");
-            SemanaActual = string.IsNullOrEmpty(nombreUsuario) ? string.Empty : $"Semana: {fechaServ.NoSemanaDelAnio} del {fechaServ.PrimerDia.ToShortDateString()} al {fechaServ.UltimoDia.ToShortDateString()}";
+            SemanaActual = string.IsNullOrEmpty(nombreUsuario) ? string.Empty : $"Semana: {fechaServ.NoSemanaDelAnio()} del {fechaServ.PrimerDia.ToShortDateString()} al {fechaServ.UltimoDia.ToShortDateString()}";
         }
         if (e.PropertyName == nameof(SelectedActividadesSemana))
         {
@@ -143,7 +152,7 @@ public partial class PgPrincipalVistaModelo : ObservableObject
 
         if (!string.IsNullOrEmpty(nombreUsuario))
         {
-            if (!expLocalServ.ExisteDatos)
+            if (!expLocalServ.ExisteDatos || !expLocalServ.ExisteSemana(fechaServ.NoSemanaDelAnio()))
             {
                 expLocalServ.NuevaSemana(fechaServ.NoSemanaDelAnio());
             }

@@ -3,21 +3,52 @@
     x:Class="ISL.Vistas.PgQrCode"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:ISL.VistaModelos"
     xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI"
-    Title="Datos a código Qr">
-    <VerticalStackLayout>
-        <Label
-            HorizontalOptions="Center"
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" />
+    Title="Datos a código Qr"
+    x:DataType="vm:PgQrCodeVistaModelo"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="auto,*,auto">
+        <Grid
+            Grid.Row="0"
+            ColumnDefinitions="auto,*">
+            <HorizontalStackLayout
+                Grid.Column="0"
+                Padding="8"
+                Spacing="4">
+                <ImageButton
+                    Padding="4"
+                    Aspect="Center"
+                    Command="{Binding RegresarCommand}"
+                    HeightRequest="42"
+                    Source="application_exit.png"
+                    VerticalOptions="Center"
+                    WidthRequest="42" />
+                <Label
+                    Padding="0"
+                    FontSize="Title"
+                    Text="Datos a código Qr"
+                    VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </Grid>
         <zxing:BarcodeGeneratorView
+            Grid.Row="1"
             Margin="8"
             BackgroundColor="Transparent"
             ForegroundColor="Snow"
             Format="QrCode"
-            HeightRequest="400"
-            MaximumHeightRequest="400"
+            HeightRequest="300"
+            MaximumHeightRequest="300"
             MinimumHeightRequest="250"
-            Value="Hola soy raul" />
-    </VerticalStackLayout>
+            MinimumWidthRequest="250"
+            Value="{Binding ExpedienteQr, Mode=OneWay}" />
+        <Grid
+            Grid.Row="2"
+            Style="{StaticResource FooterBar}">
+            <Label
+                Style="{StaticResource Autor}"
+                Text="By RandA Media Lab, Group." />
+        </Grid>
+    </Grid>
 </ContentPage>

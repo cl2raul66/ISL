@@ -16,15 +16,16 @@
             ColumnDefinitions="auto,*">
             <HorizontalStackLayout
                 Grid.Column="0"
+                Padding="8"
                 Spacing="4">
                 <ImageButton
                     Padding="4"
                     Aspect="Center"
                     Command="{Binding RegresarCommand}"
-                    HeightRequest="48"
+                    HeightRequest="42"
                     Source="application_exit.png"
                     VerticalOptions="Center"
-                    WidthRequest="48" />
+                    WidthRequest="42" />
                 <Label
                     Padding="0"
                     FontSize="Title"
@@ -45,6 +46,16 @@
                         DetailColor="{StaticResource SecundarioBg}"
                         Text="Nombre completo"
                         TextColor="{StaticResource Secundario}" />
+                </TableSection>
+                <TableSection
+                    Title="Exportar"
+                    TextColor="{StaticResource Secundario}">
+                    <TextCell
+                        Command="{Binding SetModADCommand}"
+                        Detail="{Binding EstadoAbrirDoc, Mode=OneWay, StringFormat='Estado: {0}, toque para modificar'}"
+                        DetailColor="{StaticResource SecundarioBg}"
+                        Text="Documento"
+                        TextColor="{StaticResource Secundario}"/>
                 </TableSection>
             </TableRoot>
         </TableView>

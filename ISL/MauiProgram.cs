@@ -22,16 +22,21 @@ public static class MauiProgram
         builder.UseBarcodeReader();
         builder.Services.AddSingleton<IExpedienteLocalServicio, ExpedienteLocalServicio>();
         builder.Services.AddSingleton<IFechaServicio, FechaServicio>();
+        builder.Services.AddSingleton<IGenerarDocServicio, GenerarDocServicio>();
+
         builder.Services.AddTransient<PgPrincipalVistaModelo>();
         builder.Services.AddTransient<PgAjustesVistaModelo>();
         builder.Services.AddTransient<PgModNCVistaModelo>();
         builder.Services.AddTransient<PgAgregarActividadVistaModelo>();
         builder.Services.AddTransient<PgModObservacionesVistaModelo>();        
+        builder.Services.AddTransient<PgQrCodeVistaModelo>();  
+        
         builder.Services.AddTransient<PgPrincipal>();
         builder.Services.AddTransient<PgAjustes>();
         builder.Services.AddTransient<PgModNC>();
         builder.Services.AddTransient<PgAgregarActividad>();
         builder.Services.AddTransient<PgModObservaciones>();
+        builder.Services.AddTransient<PgQrCode>();
 
         return builder.Build();
 	}

@@ -10,10 +10,4 @@ public partial class PgAjustes : ContentPage
 
         BindingContext = vm;
     }
-
-    protected override bool OnBackButtonPressed()
-    {
-        return base.OnBackButtonPressed();
-    }
-
 }

@@ -9,6 +9,7 @@ public interface IExpedienteLocalServicio
     bool ExisteDatos { get; }
 
     bool AgregarLabores(Labor entity);
+    bool ExisteSemana(int noSemana);
     ExpedienteLocal GetSemana(int noSemana);
     bool NuevaSemana(int noSemana);
 }
@@ -36,6 +37,8 @@ public class ExpedienteLocalServicio : IExpedienteLocalServicio
     public bool ExisteBd { private set; get; }
 
     public bool ExisteDatos => collection.LongCount() > 0;
+
+    public bool ExisteSemana(int noSemana) => collection.Exists(x => x.Id == noSemana);
 
     public ExpedienteLocal GetSemana(int noSemana) => collection.FindById(noSemana);
 
