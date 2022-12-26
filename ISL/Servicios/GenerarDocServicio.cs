@@ -48,6 +48,8 @@ public class GenerarDocServicio : IGenerarDocServicio
         {"#fir#",string.Empty}
     };
 
+    string fileCache = Path.Combine(FileSystem.Current.CacheDirectory, "Plantilla_ISL.docx");
+
     public GenerarDocServicio(IFechaServicio fechaServicio)
     {
         fechaServ = fechaServicio;
@@ -55,7 +57,10 @@ public class GenerarDocServicio : IGenerarDocServicio
 
     public async Task Crear(Expediente exp)
     {
-        var fileCache = Path.Combine(FileSystem.Current.CacheDirectory, "Plantilla_ISL.docx");
+        if (File.Exists(fileCache))
+        {
+            File.Delete(fileCache);
+        }
         var doc = await FileSystem.Current.OpenAppPackageFileAsync("Plantilla_ISL.docx");
         FileStream fs = File.OpenWrite(fileCache);
         await doc.CopyToAsync(fs);

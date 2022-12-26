@@ -19,6 +19,9 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
     {
         expLocalServ = expedienteLocalServicio;
         fechaSer = fechaServicio;
+
+        HEntrada = new TimeSpan(7, 0, 0);
+        HSalida = new TimeSpan(17, 0, 0);
     }
 
     [ObservableProperty]
@@ -88,7 +91,10 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
     {
         if (e.PropertyName == nameof(Dia))
         {
-
+            if (fechaSer.DiaSemana(Convert.ToDateTime(dia.ToShortDateString())) == "Sábado")
+            {
+                HSalida = new TimeSpan(1, 0, 0);
+            }
         }
         
         if (e.PropertyName == nameof(HEntrada))
@@ -108,8 +114,15 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
                 ListaActividad = new(laborDia.Actividades);
             }
 
-            HEntrada = laborDia?.HorarioEntrada is null ? new TimeSpan(7, 0, 0) : new TimeSpan(laborDia.HorarioEntrada.Value.Hour, laborDia.HorarioEntrada.Value.Minute, laborDia.HorarioEntrada.Value.Second);
-            HSalida = laborDia?.HorarioSalida?.TimeOfDay is null ? new TimeSpan(17, 0, 0) : new TimeSpan(laborDia.HorarioSalida.Value.Hour, laborDia.HorarioSalida.Value.Minute, laborDia.HorarioSalida.Value.Second);
+            if (laborDia?.HorarioEntrada is not null)
+            {
+                HEntrada = new TimeSpan(laborDia.HorarioEntrada.Value.Hour, laborDia.HorarioEntrada.Value.Minute, laborDia.HorarioEntrada.Value.Second);
+            }
+
+            if (laborDia?.HorarioSalida?.TimeOfDay is not null)
+            {
+                HSalida = new TimeSpan(laborDia.HorarioSalida.Value.Hour, laborDia.HorarioSalida.Value.Minute, laborDia.HorarioSalida.Value.Second);
+            }            
         }
         base.OnPropertyChanged(e);
     }
