@@ -37,6 +37,7 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
     private string currentActividad;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SelectedDia))]
     private DateOnly dia;
 
     [ObservableProperty]
@@ -70,7 +71,7 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
     [RelayCommand]
     private void Agregar()
     {
-        ListaActividad.Insert(0, actividad);
+        ListaActividad.Insert(0, actividad.Trim());
         Actividad = string.Empty;
     }
 

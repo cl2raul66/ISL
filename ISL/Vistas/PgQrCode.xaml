@@ -34,14 +34,9 @@
         </Grid>
         <zxing:BarcodeGeneratorView
             Grid.Row="1"
-            Margin="8"
             BackgroundColor="Transparent"
             ForegroundColor="Snow"
             Format="QrCode"
-            HeightRequest="300"
-            MaximumHeightRequest="300"
-            MinimumHeightRequest="250"
-            MinimumWidthRequest="250"
             Value="{Binding ExpedienteQr, Mode=OneWay}" />
         <Grid
             Grid.Row="2"
