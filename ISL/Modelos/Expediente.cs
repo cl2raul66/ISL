@@ -22,4 +22,5 @@ public class ExpedienteLocal
 {
     public int Id { get; set; }
     public Dictionary<DateTime, Labor> LaboresPorDia { get; set; }
+    public string Observaciones { get; set; }
 }

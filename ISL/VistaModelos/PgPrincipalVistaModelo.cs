@@ -14,13 +14,18 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     private readonly IExpedienteLocalServicio expLocalServ;
     private readonly IFechaServicio fechaServ;
     private readonly IGenerarDocServicio generarDocServ;
+    private readonly ICompartirServicio compartirServ;
+    private readonly ICunopaDatosBotServicio datosBotServ;
+
     private ExpedienteLocal expLocal;
 
-    public PgPrincipalVistaModelo(IFechaServicio fechaServicio, IExpedienteLocalServicio expedienteLocalServicio, IGenerarDocServicio generarDocServicio)
+    public PgPrincipalVistaModelo(IFechaServicio fechaServicio, IExpedienteLocalServicio expedienteLocalServicio, IGenerarDocServicio generarDocServicio, ICompartirServicio compartirServicio, ICunopaDatosBotServicio cunopaDatosBotServicio)
     {
         fechaServ = fechaServicio;
         expLocalServ = expedienteLocalServicio;
         generarDocServ = generarDocServicio;
+        compartirServ = compartirServicio;
+        datosBotServ = cunopaDatosBotServicio;
     }
 
     [ObservableProperty]
@@ -42,21 +47,20 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     private string semanaActual;
 
     [ObservableProperty]
-    private bool enableQrCode;
+    private bool enableObservaciones;
 
     [ObservableProperty]
-    private bool enableObservaciones;
+    private bool tieneDatosRequerido;
 
     [RelayCommand]
     private async Task GoToQrCode() => await Shell.Current.GoToAsync(nameof(PgQrCode), new Dictionary<string, object>()
     {
-        {"exp", new Expediente(){ Usuario=nombreUsuario, NoSemana= expLocal.Id, Observaciones=Preferences.Get("Obs", string.Empty), LaboresPorDia=expLocal.LaboresPorDia.Values.ToList()} }
+        {"exp", new Expediente(){ Usuario=nombreUsuario, NoSemana= expLocal.Id, Observaciones=expLocal.Observaciones, LaboresPorDia=expLocal.LaboresPorDia.Values.ToList()} }
     });
 
     [RelayCommand]
-    private async Task GoToAjustes() => await Shell.Current.GoToAsync(nameof(PgAjustes), new Dictionary<string, object>() { 
-        { nameof(NombreUsuario), NombreUsuario },
-        { "verDoc", Preferences.Get("verDoc", false) },
+    private async Task GoToAjustes() => await Shell.Current.GoToAsync(nameof(PgAjustes), new Dictionary<string, object>() {
+        { nameof(NombreUsuario), NombreUsuario }
     });
 
     [RelayCommand]
@@ -74,29 +78,25 @@ public partial class PgPrincipalVistaModelo : ObservableObject
     [RelayCommand]
     public async Task GoToObservaciones() => await Shell.Current.GoToAsync(nameof(PgModObservaciones));
 
-    [RelayCommand]
-    public Task VerObciones(string page) => page switch
+    public async Task VerObciones(string opciones)
     {
-        "Generar ISL" => generarDocServ.Crear(new Expediente() { Usuario = nombreUsuario, NoSemana = expLocal.Id, Observaciones = Preferences.Get("Obs", string.Empty), LaboresPorDia = expLocal.LaboresPorDia.Values.ToList() }),
-        "Datos a código Qr" => GoToQrCode(),
-        "Ajustes" => GoToAjustes(),
-        _ => Task.CompletedTask
-    };
-
-    [RelayCommand]
-    private async Task CompartirPlantillaManual()
-    {
-        var fileCache = Path.Combine(FileSystem.Current.CacheDirectory, "Modelo_ISL.docx");
-        var doc = await FileSystem.Current.OpenAppPackageFileAsync("Plantilla_ISL_Manual.docx");
-        FileStream fs = File.OpenWrite(fileCache);
-        await doc.CopyToAsync(fs);
-        fs.Close();
-
-        await Share.Default.RequestAsync(new ShareFileRequest
+        if (opciones == "Código Qr del ISL actual") { await GoToQrCode(); }
+        else if (opciones == "Visualizar ISL de semana actual")
         {
-            Title = "Modelo ISL",
-            File = new ShareFile(fileCache)
-        });
+            await generarDocServ.Visualizar(new Expediente() { Usuario = nombreUsuario, NoSemana = expLocal.Id, Observaciones = expLocal.Observaciones, LaboresPorDia = expLocal.LaboresPorDia.Values.ToList() });
+        }
+        else if (opciones == "Ajustes") { await GoToAjustes(); }
+        else await Task.CompletedTask;
+    }
+
+    public async Task Compartir(string opciones)
+    {
+        if (opciones == "Con datos de semana actual")
+        {
+            await compartirServ.CompartirPlantilla(new Expediente() { Usuario = nombreUsuario, NoSemana = expLocal.Id, Observaciones = expLocal.Observaciones, LaboresPorDia = expLocal.LaboresPorDia.Values.ToList() });
+        }
+        else if (opciones == "Vació para llenado manual") { await compartirServ.CompartirPlantillaManual(); }
+        else await Task.CompletedTask;
     }
 
     #region extra
@@ -105,13 +105,7 @@ public partial class PgPrincipalVistaModelo : ObservableObject
         if (e.PropertyName == nameof(NombreUsuario))
         {
             EnableObservaciones = !string.IsNullOrEmpty(nombreUsuario);
-            EnableQrCode = !string.IsNullOrEmpty(nombreUsuario);
-            //FechaHoy = string.IsNullOrEmpty(nombreUsuario) ? string.Empty : fechaServ.Hoy.ToString("D");
             SemanaActual = string.IsNullOrEmpty(nombreUsuario) ? string.Empty : $"Semana: {fechaServ.NoSemanaDelAnio()} del {fechaServ.PrimerDia.ToShortDateString()} al {fechaServ.UltimoDia.ToShortDateString()}";
-        }
-        if (e.PropertyName == nameof(SelectedActividadesSemana))
-        {
-            var ss = selectedActividadesSemana;
         }
 
         base.OnPropertyChanged(e);
@@ -151,7 +145,16 @@ public partial class PgPrincipalVistaModelo : ObservableObject
         }
 
         if (!string.IsNullOrEmpty(nombreUsuario))
-        {
+        {           
+            if (fechaServ.EsDomingo && expLocalServ.ExistenLabores)
+            {
+                datosBotServ.EnviarDatosToBot(fechaServ.NoSemanaDelAnio());
+            }
+            else if (!Preferences.Get("telegramBot", true))
+            {
+                datosBotServ.EnviarDatosToBot(fechaServ.NoSemanaDelAnio() - 1);
+            }
+
             if (!expLocalServ.ExisteDatos || !expLocalServ.ExisteSemana(fechaServ.NoSemanaDelAnio()))
             {
                 expLocalServ.NuevaSemana(fechaServ.NoSemanaDelAnio());
@@ -178,27 +181,13 @@ public partial class PgPrincipalVistaModelo : ObservableObject
 
         if (actividadesSemana.Any())
         {
-            SelectedActividadesSemana = actividadesSemana.Where(x => x.Dia == fechaServ.HoyFecha).FirstOrDefault();
+            SelectedActividadesSemana = actividadesSemana.Where(x => x.Dia == (fechaServ.EsDomingo ? fechaServ.HoyFecha.AddDays(-1) : fechaServ.HoyFecha)).FirstOrDefault();
         }
+
+        TieneDatosRequerido = !string.IsNullOrEmpty(nombreUsuario) && expLocalServ.ExistenLabores;
+
         NotificarUsuario();
-        //SetCurrentSemana();
         OrdenarNotificaciones();
     }
-
-    //private void SetCurrentSemana()
-    //{
-    //    if (!string.IsNullOrEmpty(nombreUsuario))
-    //    {
-    //        foreach (string diaSemanaIniciales in fechaServ.DiasFechas.Keys)
-    //        {
-    //            ActividadesSemana.Add(new() { DiaSemanaIniciales = diaSemanaIniciales });
-    //        }
-    //    }
-
-    //    if (actividadesSemana.Any())
-    //    {
-    //        SelectedActividadesSemana = actividadesSemana[(int)fechaServ.DowHoy == 0 ? 6 : (int)fechaServ.DowHoy - 1];
-    //    }
-    //}
     #endregion
 }

@@ -28,7 +28,7 @@
                 <Label
                     Padding="0"
                     FontSize="Title"
-                    Text="Datos a código Qr"
+                    Text="Código Qr del ISL actual"
                     VerticalOptions="Center" />
             </HorizontalStackLayout>
         </Grid>

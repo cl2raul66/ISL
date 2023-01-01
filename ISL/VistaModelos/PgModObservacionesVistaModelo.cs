@@ -1,14 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ISL.Servicios;
 using Microsoft.Maui.Platform;
 
 namespace ISL.VistaModelos;
 
 public partial class PgModObservacionesVistaModelo : ObservableObject
 {
-    public PgModObservacionesVistaModelo()
+    private readonly IExpedienteLocalServicio expLocalServ;
+    private readonly IFechaServicio fechaServ;
+
+    public PgModObservacionesVistaModelo(IFechaServicio fechaServicio, IExpedienteLocalServicio expedienteLocalServicio)
     {
-        Observaciones = Preferences.Get("Obs", string.Empty);
+        expLocalServ = expedienteLocalServicio;
+        fechaServ = fechaServicio;
+
+        Observaciones = expLocalServ.GetObservaciones(fechaServ.NoSemanaDelAnio());
     }
 
     [ObservableProperty]
@@ -17,10 +24,6 @@ public partial class PgModObservacionesVistaModelo : ObservableObject
     [RelayCommand]
     private async Task Cancelar()
     {
-        //string locationShell = Shell.Current.CurrentState.Location.OriginalString;
-        //int indexLocationShell = locationShell.LastIndexOf('/');
-        //string Location = locationShell[..indexLocationShell];
-        //await Shell.Current.GoToAsync($"{Location}", false);
 #if ANDROID
         if (Platform.CurrentActivity.CurrentFocus != null)
         {
@@ -33,7 +36,7 @@ public partial class PgModObservacionesVistaModelo : ObservableObject
     [RelayCommand]
     private async Task Guardar()
     {
-        Preferences.Set("Obs", observaciones.Trim());
+        expLocalServ.AgregarObservaciones(observaciones);
         await Cancelar();
     }
 }

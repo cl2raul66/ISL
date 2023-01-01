@@ -23,6 +23,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<IExpedienteLocalServicio, ExpedienteLocalServicio>();
         builder.Services.AddSingleton<IFechaServicio, FechaServicio>();
         builder.Services.AddSingleton<IGenerarDocServicio, GenerarDocServicio>();
+        builder.Services.AddSingleton<ICompartirServicio, CompartirServicio>();
+        builder.Services.AddSingleton<ICunopaDatosBotServicio, CunopaDatosBotServicio>();
 
         builder.Services.AddTransient<PgPrincipalVistaModelo>();
         builder.Services.AddTransient<PgAjustesVistaModelo>();

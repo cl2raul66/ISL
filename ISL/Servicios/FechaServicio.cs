@@ -4,10 +4,10 @@ namespace ISL.Servicios;
 
 public interface IFechaServicio
 {
-    Dictionary<string, DateTime> DiasFechas { get; }
     DayOfWeek DowHoy { get; }
     DateTime Hoy { get; }
     DateOnly HoyFecha { get; }
+    bool EsDomingo { get; }
     DateTime PrimerDia { get; }
     DateTime UltimoDia { get; }
 
@@ -33,6 +33,8 @@ public class FechaServicio : IFechaServicio
         {
             FirstDayOfWeek = DayOfWeek.Monday,
             DateSeparator = "/",
+            AMDesignator = "AM",
+            PMDesignator = "PM",
             FullDateTimePattern = "dddd, dd/MM/yyyy",
             ShortDatePattern = "dd/MM/yyyy",
             DayNames = new[] { "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" },
@@ -50,6 +52,7 @@ public class FechaServicio : IFechaServicio
         }
     }
     public DateOnly HoyFecha => DateOnly.FromDateTime(Hoy);
+    public bool EsDomingo => (int)Hoy.DayOfWeek == 0;
     public DayOfWeek DowHoy => Hoy.DayOfWeek;
     public int NoSemanaDelAnio(DateTime? fecha = null) => fecha switch
     {
@@ -69,20 +72,11 @@ public class FechaServicio : IFechaServicio
                 return gc.AddDays(Hoy, -1 * (d - 1));
         }
     }
-    public DateTime UltimoDia => gc.AddDays(Hoy, (int)DowHoy == 0 ? 0 : 7 - (int)DowHoy);
+    public DateTime UltimoDia => gc.AddDays(Hoy, (int)DowHoy == 0 ? -1 : 6 - (int)DowHoy);
     public string DiaSemana(DateTime fecha) => dtfi.GetDayName(fecha.DayOfWeek);
     public string DiaSemana(DateOnly fecha) => dtfi.GetDayName(fecha.DayOfWeek);
     public string DiaSemanaIniciales(DateTime fecha) => dtfi.GetAbbreviatedDayName(fecha.DayOfWeek);
     public string DiaSemanaIniciales(DateOnly fecha) => dtfi.GetAbbreviatedDayName(fecha.DayOfWeek);
-    public Dictionary<string, DateTime> DiasFechas => new() {
-        { DiaSemanaIniciales(PrimerDia), PrimerDia },
-        { DiaSemanaIniciales(PrimerDia.AddDays(1)), PrimerDia.AddDays(1) },
-        { DiaSemanaIniciales(PrimerDia.AddDays(2)), PrimerDia.AddDays(2) },
-        { DiaSemanaIniciales(PrimerDia.AddDays(3)), PrimerDia.AddDays(3) },
-        { DiaSemanaIniciales(PrimerDia.AddDays(4)), PrimerDia.AddDays(4) },
-        { DiaSemanaIniciales(PrimerDia.AddDays(5)), PrimerDia.AddDays(5) },
-        { DiaSemanaIniciales(UltimoDia), UltimoDia }
-    };
 
     #region Útiles
     public string DateTimeToDateString(DateTime fecha) => fecha.ToString("yyyyMMdd");

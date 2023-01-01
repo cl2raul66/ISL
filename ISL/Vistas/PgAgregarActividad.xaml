@@ -127,10 +127,11 @@
                     BorderColor="{StaticResource SecundarioBg}"
                     CornerRadius="4">
                     <Editor
-                        HeightRequest="75"
+                        AutoSize="TextChanges"
                         IsSpellCheckEnabled="True"
                         IsTextPredictionEnabled="True"
                         Keyboard="Text"
+                        MinimumHeightRequest="75"
                         Placeholder="Requerido"
                         Text="{Binding Actividad, Mode=TwoWay}"
                         VerticalTextAlignment="Start" />

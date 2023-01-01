@@ -7,9 +7,12 @@ public interface IExpedienteLocalServicio
 {
     bool ExisteBd { get; }
     bool ExisteDatos { get; }
+    bool ExistenLabores { get; }
 
     bool AgregarLabores(Labor entity);
+    bool AgregarObservaciones(string observaciones, int? noSemana = null);
     bool ExisteSemana(int noSemana);
+    string GetObservaciones(int noSemana);
     ExpedienteLocal GetSemana(int noSemana);
     bool NuevaSemana(int noSemana);
 }
@@ -40,7 +43,28 @@ public class ExpedienteLocalServicio : IExpedienteLocalServicio
 
     public bool ExisteSemana(int noSemana) => collection.Exists(x => x.Id == noSemana);
 
+    public bool ExistenLabores
+    {
+        get
+        {
+            var r1 = collection.FindById(fechaServ.NoSemanaDelAnio())?.LaboresPorDia;
+            if (r1 is not null)
+            {
+                foreach (var item in r1.Values)
+                {
+                    if (item?.Actividades?.Any() ?? false)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+
     public ExpedienteLocal GetSemana(int noSemana) => collection.FindById(noSemana);
+
+    public string GetObservaciones(int noSemana) => collection.FindById(noSemana)?.Observaciones ?? string.Empty;
 
     public bool NuevaSemana(int noSemana)
     {
@@ -54,7 +78,6 @@ public class ExpedienteLocalServicio : IExpedienteLocalServicio
                 {fechaServ.PrimerDia.AddDays(2), null },
                 {fechaServ.PrimerDia.AddDays(3), null },
                 {fechaServ.PrimerDia.AddDays(4), null },
-                {fechaServ.PrimerDia.AddDays(5), null },
                 {fechaServ.UltimoDia, null }
             }
         };
@@ -65,6 +88,13 @@ public class ExpedienteLocalServicio : IExpedienteLocalServicio
     {
         var expediente = GetSemana(fechaServ.NoSemanaDelAnio(entity.HorarioEntrada));
         expediente.LaboresPorDia[entity.HorarioEntrada.Value.Date] = entity;
+        return collection.Update(expediente.Id, expediente);
+    }
+
+    public bool AgregarObservaciones(string observaciones, int? noSemana = null)
+    {
+        ExpedienteLocal expediente = noSemana is not null ? GetSemana(noSemana.Value) : GetSemana(fechaServ.NoSemanaDelAnio());
+        expediente.Observaciones = observaciones;
         return collection.Update(expediente.Id, expediente);
     }
 }

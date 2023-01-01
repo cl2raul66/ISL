@@ -8,6 +8,7 @@ namespace ISL.Servicios;
 public interface IGenerarDocServicio
 {
     Task Crear(Expediente exp);
+    Task Visualizar(Expediente exp);
 }
 
 public class GenerarDocServicio : IGenerarDocServicio
@@ -48,7 +49,7 @@ public class GenerarDocServicio : IGenerarDocServicio
         {"#fir#",string.Empty}
     };
 
-    string fileCache = Path.Combine(FileSystem.Current.CacheDirectory, "Plantilla_ISL.docx");
+    private string fileCache = Path.Combine(FileSystem.Current.CacheDirectory, "Plantilla_ISL.docx");
 
     public GenerarDocServicio(IFechaServicio fechaServicio)
     {
@@ -87,11 +88,12 @@ public class GenerarDocServicio : IGenerarDocServicio
                 sw.WriteLine(docText);
             }
         }
+    }
 
-        if (Preferences.Get("verDoc", false))
-        {
-            await Launcher.Default.OpenAsync(new OpenFileRequest(Path.GetFileNameWithoutExtension(fileCache), new ReadOnlyFile(fileCache)));
-        }
+    public async Task Visualizar(Expediente exp)
+    {
+        await Crear(exp);
+        await Launcher.Default.OpenAsync(new OpenFileRequest(Path.GetFileNameWithoutExtension(fileCache), new ReadOnlyFile(fileCache)));
     }
 
     #region Código extra
@@ -129,7 +131,7 @@ public class GenerarDocServicio : IGenerarDocServicio
         modeloDoc["#fir#"] = string.Empty;
     }
 
-    private string ListStringToString(List<string>? lista)
+    private string ListStringToString(List<string> lista)
     {
         if (lista is null)
         {

@@ -47,16 +47,6 @@
                         Text="Nombre completo"
                         TextColor="{StaticResource Secundario}" />
                 </TableSection>
-                <TableSection
-                    Title="Exportar"
-                    TextColor="{StaticResource Secundario}">
-                    <TextCell
-                        Command="{Binding SetModADCommand}"
-                        Detail="{Binding EstadoAbrirDoc, Mode=OneWay, StringFormat='Estado: {0}, toque para modificar'}"
-                        DetailColor="{StaticResource SecundarioBg}"
-                        Text="Documento"
-                        TextColor="{StaticResource Secundario}"/>
-                </TableSection>
             </TableRoot>
         </TableView>
         <Grid

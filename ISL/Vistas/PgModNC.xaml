@@ -17,6 +17,7 @@
         VerticalOptions="Center">
         <VerticalStackLayout Spacing="8">
             <Label
+                FontSize="Title"
                 HorizontalOptions="Center"
                 Text="Modificar - Nombre Completo"
                 VerticalOptions="Center" />

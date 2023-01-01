@@ -41,12 +41,27 @@
                 x:Key="ActividadesSemanaDataTemplate"
                 x:DataType="modelos:LaborView">
                 <Frame
-                    x:Name="FItem"
                     Margin="0,0,0,8"
                     Style="{StaticResource FrameItem}">
                     <Grid
                         ColumnDefinitions="50,*,auto"
                         ColumnSpacing="8">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="VisualStateManager.VisualStateGroups">
+                                    <VisualStateGroupList>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal" />
+                                            <VisualState x:Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="{StaticResource Secundario}" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateGroupList>
+                                </Setter>
+                            </Style>
+                        </Grid.Style>
                         <Frame
                             x:Name="FSemana"
                             Grid.Column="0"
@@ -107,11 +122,12 @@
                     Source="document_new.png"
                     WidthRequest="42" />
                 <ImageButton
-                    x:Name="ImgBtnModelo"
+                    x:Name="ImgBtnCompartir"
                     Padding="4"
                     Aspect="Center"
-                    Command="{Binding CompartirPlantillaManualCommand}"
+                    Clicked="ImgBtnCompartir_Clicked"
                     HeightRequest="42"
+                    MenuItem.Accelerator=""
                     Source="preferences_system_sharing.png"
                     WidthRequest="42" />
                 <ImageButton

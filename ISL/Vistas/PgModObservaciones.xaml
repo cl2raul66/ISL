@@ -40,7 +40,12 @@
                     <Editor
                         x:Name="EditorObservaciones"
                         AutoSize="TextChanges"
-                        Text="{Binding Observaciones, Mode=TwoWay}" />
+                        IsSpellCheckEnabled="True"
+                        IsTextPredictionEnabled="True"
+                        Keyboard="Text"
+                        MinimumHeightRequest="75"
+                        Text="{Binding Observaciones, Mode=TwoWay}"
+                        VerticalTextAlignment="Start" />
                 </Frame>
             </Grid>
             <Grid
