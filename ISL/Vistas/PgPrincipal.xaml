@@ -40,46 +40,28 @@
             <DataTemplate
                 x:Key="ActividadesSemanaDataTemplate"
                 x:DataType="modelos:LaborView">
-                <Frame
-                    Margin="0,0,0,8"
-                    Style="{StaticResource FrameItem}">
-                    <Grid
-                        ColumnDefinitions="50,*,auto"
-                        ColumnSpacing="8">
-                        <Grid.Style>
-                            <Style TargetType="Grid">
-                                <Setter Property="VisualStateManager.VisualStateGroups">
-                                    <VisualStateGroupList>
-                                        <VisualStateGroup x:Name="CommonStates">
-                                            <VisualState x:Name="Normal" />
-                                            <VisualState x:Name="Selected">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BackgroundColor" Value="{StaticResource Secundario}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateGroupList>
-                                </Setter>
-                            </Style>
-                        </Grid.Style>
+                <Border Style="{StaticResource BorderItem}">
+                    <Border.Stroke>
+                        <SolidColorBrush Color="{StaticResource SecundarioBg}" />
+                    </Border.Stroke>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="4" />
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="50,*,auto">
                         <Frame
-                            x:Name="FSemana"
                             Grid.Column="0"
                             BackgroundColor="{StaticResource Principal}"
                             Style="{StaticResource FrameSemana}">
                             <Label
-                                x:Name="LSemana"
                                 Style="{StaticResource LabelSemana}"
                                 Text="{Binding Dia, Mode=OneWay, Converter={StaticResource FechaToDiaSemanaIniciales}}" />
                         </Frame>
                         <Label
-                            x:Name="LTextoItem"
                             Grid.Column="1"
                             Style="{StaticResource LabelTextoItem}"
                             Text="{Binding NoActividades, Mode=OneWay}"
                             TextColor="{StaticResource Principal}" />
                         <Label
-                            x:Name="LHorarioItem"
                             Grid.Column="2"
                             Style="{StaticResource LabelHorarioItem}"
                             TextColor="{StaticResource Principal}">
@@ -92,7 +74,7 @@
                             </Label.FormattedText>
                         </Label>
                     </Grid>
-                </Frame>
+                </Border>
             </DataTemplate>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -160,7 +142,6 @@
                 IsVisible="{Binding FechaHoy, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
                 Style="{StaticResource Informacion}"
                 Text="{Binding FechaHoy, StringFormat='Hoy es {0}', Mode=OneWay}" />
-            <!--<Line Style="{StaticResource Separador}" />-->
         </VerticalStackLayout>
         <CollectionView
             Grid.Row="2"

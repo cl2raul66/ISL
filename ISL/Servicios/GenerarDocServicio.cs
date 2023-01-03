@@ -15,40 +15,6 @@ public class GenerarDocServicio : IGenerarDocServicio
 {
     private readonly IFechaServicio fechaServ;
 
-    private Dictionary<string, string> modeloDoc = new()
-    {
-        {"#nombrecompleto#",string.Empty},
-        {"#fechaini#",string.Empty},
-        {"#fechafin#",string.Empty},
-
-        {"#luhi#",string.Empty},
-        {"#luhf#",string.Empty},
-        {"#lul#",string.Empty},
-
-        {"#mahi#",string.Empty},
-        {"#mahf#",string.Empty},
-        {"#mal#",string.Empty},
-
-        {"#mihi#",string.Empty},
-        {"#mihf#",string.Empty},
-        {"#mil#",string.Empty},
-
-        {"#juhi#",string.Empty},
-        {"#juhf#",string.Empty},
-        {"#jul#",string.Empty},
-
-        {"#vihi#",string.Empty},
-        {"#vihf#",string.Empty},
-        {"#vil#",string.Empty},
-
-        {"#sahi#",string.Empty},
-        {"#sahf#",string.Empty},
-        {"#sal#",string.Empty},
-
-        {"#obs#",string.Empty},
-        {"#fir#",string.Empty}
-    };
-
     private string fileCache = Path.Combine(FileSystem.Current.CacheDirectory, "Plantilla_ISL.docx");
 
     public GenerarDocServicio(IFechaServicio fechaServicio)
@@ -67,7 +33,7 @@ public class GenerarDocServicio : IGenerarDocServicio
         await doc.CopyToAsync(fs);
         fs.Close();
 
-        ExpedienteToModeloDoc(exp);
+        var modeloDoc = ExpedienteToModeloDoc(exp);
 
         using (var wordDoc = WordprocessingDocument.Open(fileCache, true))
         {
@@ -97,38 +63,41 @@ public class GenerarDocServicio : IGenerarDocServicio
     }
 
     #region Código extra
-    private void ExpedienteToModeloDoc(Expediente exp)
+    private Dictionary<string, string> ExpedienteToModeloDoc(Expediente exp)
     {
-        modeloDoc["#nombrecompleto#"] = exp.Usuario;
-        modeloDoc["#fechaini#"] = fechaServ.PrimerDia.ToShortDateString();
-        modeloDoc["#fechafin#"] = fechaServ.UltimoDia.ToShortDateString();
+        Dictionary<string, string> resul = new(){
+            {"#nombrecompleto#", exp.Usuario},
+            {"#fechaini#", fechaServ.PrimerDia.ToShortDateString()},
+            {"#fechafin#", fechaServ.UltimoDia.ToShortDateString()},
 
-        modeloDoc["#luhi#"] = exp.LaboresPorDia[0]?.HorarioEntrada.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#luhf#"] = exp.LaboresPorDia[0]?.HorarioSalida.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#lul#"] = ListStringToString(exp.LaboresPorDia[0]?.Actividades);
+            {"#luhi#", exp.LaboresPorDia[0]?.HorarioEntrada?.ToString("t") ?? string.Empty},
+            {"#luhf#", exp.LaboresPorDia[0]?.HorarioSalida?.ToString("t") ?? string.Empty},
+            {"#lul#", ListStringToString(exp.LaboresPorDia[0]?.Actividades)},
 
-        modeloDoc["#mahi#"] = exp.LaboresPorDia[1]?.HorarioEntrada.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#mahf#"] = exp.LaboresPorDia[1]?.HorarioSalida.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#mal#"] = ListStringToString(exp.LaboresPorDia[1]?.Actividades);
+            {"#mahi#", exp.LaboresPorDia[1]?.HorarioEntrada?.ToString("t") ?? string.Empty},
+            {"#mahf#", exp.LaboresPorDia[1]?.HorarioSalida?.ToString("t") ?? string.Empty},
+            {"#mal#", ListStringToString(exp.LaboresPorDia[1]?.Actividades)},
 
-        modeloDoc["#mihi#"] = exp.LaboresPorDia[2]?.HorarioEntrada.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#mihf#"] = exp.LaboresPorDia[2]?.HorarioSalida.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#mil#"] = ListStringToString(exp.LaboresPorDia[2]?.Actividades);
+            {"#mihi#", exp.LaboresPorDia[2]?.HorarioEntrada?.ToString("t") ?? string.Empty},
+            {"#mihf#", exp.LaboresPorDia[2]?.HorarioSalida?.ToString("t") ?? string.Empty},
+            {"#mil#", ListStringToString(exp.LaboresPorDia[2]?.Actividades) },
 
-        modeloDoc["#juhi#"] = exp.LaboresPorDia[3]?.HorarioEntrada.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#juhf#"] = exp.LaboresPorDia[3]?.HorarioSalida.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#jul#"] = ListStringToString(exp.LaboresPorDia[3]?.Actividades);
+            {"#juhi#", exp.LaboresPorDia[3]?.HorarioEntrada?.ToString("t") ?? string.Empty},
+            { "#juhf#", exp.LaboresPorDia[3]?.HorarioSalida?.ToString("t") ?? string.Empty},
+            {"#jul#", ListStringToString(exp.LaboresPorDia[3]?.Actividades) },
 
-        modeloDoc["#vihi#"] = exp.LaboresPorDia[4]?.HorarioEntrada.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#vihf#"] = exp.LaboresPorDia[4]?.HorarioSalida.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#vil#"] = ListStringToString(exp.LaboresPorDia[4]?.Actividades);
+            {"#vihi#", exp.LaboresPorDia[4]?.HorarioEntrada?.ToString("t") ?? string.Empty},
+            {"#vihf#", exp.LaboresPorDia[4]?.HorarioSalida?.ToString("t") ?? string.Empty},
+            {"#vil#", ListStringToString(exp.LaboresPorDia[4]?.Actividades)},
 
-        modeloDoc["#sahi#"] = exp.LaboresPorDia[5]?.HorarioEntrada.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#sahf#"] = exp.LaboresPorDia[5]?.HorarioSalida.Value.ToString("t") ?? string.Empty;
-        modeloDoc["#sal#"] = ListStringToString(exp.LaboresPorDia[5]?.Actividades);
+            {"#sahi#", exp.LaboresPorDia[5]?.HorarioEntrada?.ToString("t") ?? string.Empty},
+            {"#sahf#", exp.LaboresPorDia[5]?.HorarioSalida?.ToString("t") ?? string.Empty},
+            {"#sal#", ListStringToString(exp.LaboresPorDia[5]?.Actividades)},
 
-        modeloDoc["#obs#"] = exp.Observaciones;
-        modeloDoc["#fir#"] = string.Empty;
+            {"#obs#", exp.Observaciones ?? string.Empty},
+            {"#fir#", string.Empty}
+        };
+        return resul;
     }
 
     private string ListStringToString(List<string> lista)
