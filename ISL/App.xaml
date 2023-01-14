@@ -24,6 +24,7 @@
             <cvt:FechaToDiaSemanaInicialesConverter x:Key="FechaToDiaSemanaIniciales" />
             <cvt:DateTimeToDiaSemanaConverter x:Key="DateTimeToDiaSemana" />
             <cvt:TimeOnlyToStringViewConverter x:Key="TimeOnlyToStringView" />
+            <cvt:NewOrEditToStringSourceConvrter x:Key="NewOrEditToStringSource" />
 
             <Style TargetType="TextCell">
                 <Setter Property="TextColor" Value="{StaticResource Secundario}" />

@@ -11,7 +11,7 @@ public partial class PgPrincipal : ContentPage
         InitializeComponent();
 
         BindingContext = vm;
-        _vm = this.BindingContext as PgPrincipalVistaModelo;
+        _vm = BindingContext as PgPrincipalVistaModelo;
     }
 
     private async void ImgBtnMas_Clicked(object sender, EventArgs e)

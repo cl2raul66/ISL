@@ -95,16 +95,14 @@
                 HorizontalOptions="EndAndExpand"
                 Spacing="4">
                 <ImageButton
-                    x:Name="ImgBtnNuevo"
                     Padding="4"
                     Aspect="Center"
                     Command="{Binding GoToAgregarActividadCommand}"
                     HeightRequest="42"
                     IsEnabled="{Binding SelectedActividadesSemana, Mode=OneWay, Converter={ctm:IsNotNullConverter}}"
-                    Source="document_new.png"
+                    Source="{Binding SelectedActividadesSemana.NoActividades, Mode=OneWay, Converter={StaticResource NewOrEditToStringSource}}"
                     WidthRequest="42" />
                 <ImageButton
-                    x:Name="ImgBtnCompartir"
                     Padding="4"
                     Aspect="Center"
                     Clicked="ImgBtnCompartir_Clicked"
