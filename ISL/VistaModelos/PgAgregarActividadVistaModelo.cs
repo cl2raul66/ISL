@@ -74,8 +74,23 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
     [RelayCommand]
     private void Agregar()
     {
-        ListaActividad.Insert(0, actividad.Trim());
-        Actividad = string.Empty;
+        if (string.IsNullOrEmpty(currentActividad))
+        {
+            ListaActividad.Insert(0, actividad.Trim());
+            Actividad = string.Empty;
+        }
+        else
+        {
+            int indx = listaActividad.IndexOf(currentActividad);
+            ListaActividad[indx] = actividad.Trim();
+            CurrentActividad = string.Empty;
+        }
+    }
+
+    [RelayCommand]
+    private void QuitarSeleccion()
+    {
+        CurrentActividad = string.Empty;
     }
 
     [RelayCommand]
@@ -96,15 +111,15 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
                 HSalida = new TimeSpan(1, 0, 0);
             }
         }
-        
+
         if (e.PropertyName == nameof(HEntrada))
         {
-            
+
         }
-        
+
         if (e.PropertyName == nameof(HSalida))
         {
-            
+
         }
 
         if (e.PropertyName == nameof(LaborDia))
@@ -122,8 +137,14 @@ public partial class PgAgregarActividadVistaModelo : ObservableObject
             if (laborDia?.HorarioSalida?.TimeOfDay is not null)
             {
                 HSalida = new TimeSpan(laborDia.HorarioSalida.Value.Hour, laborDia.HorarioSalida.Value.Minute, laborDia.HorarioSalida.Value.Second);
-            }            
+            }
         }
+
+        if (e.PropertyName == nameof(CurrentActividad))
+        {
+            Actividad = currentActividad;
+        }
+
         base.OnPropertyChanged(e);
     }
     #endregion

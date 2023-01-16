@@ -43,7 +43,7 @@
                     Command="{Binding AgregarCommand}"
                     HeightRequest="42"
                     IsEnabled="{Binding Actividad, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
-                    Source="list_add.png"
+                    Source="{Binding CurrentActividad, Mode=OneWay, Converter={StaticResource AddOrEditToStringSource}}"
                     WidthRequest="42" />
                 <ImageButton
                     Padding="4"
@@ -52,6 +52,14 @@
                     HeightRequest="42"
                     IsEnabled="{Binding CurrentActividad, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
                     Source="list_remove.png"
+                    WidthRequest="42" />
+                <ImageButton
+                    Padding="4"
+                    Aspect="Center"
+                    Command="{Binding QuitarSeleccionCommand}"
+                    HeightRequest="42"
+                    IsVisible="{Binding CurrentActividad, Mode=OneWay, Converter={ctm:IsStringNotNullOrEmptyConverter}}"
+                    Source="process_stop.png"
                     WidthRequest="42" />
             </HorizontalStackLayout>
         </Grid>
@@ -145,7 +153,8 @@
             <ListView
                 Margin="8"
                 ItemsSource="{Binding ListaActividad, Mode=OneWay}"
-                SelectedItem="{Binding CurrentActividad, Mode=TwoWay}">
+                SelectedItem="{Binding CurrentActividad, Mode=TwoWay}"
+                SelectionMode="Single">
                 <ListView.ItemTemplate>
                     <DataTemplate
                         x:Name="itm"

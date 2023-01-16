@@ -1,215 +1,35 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   width="360"
-   height="640"
-   viewBox="0 0 360 640"
-   version="1.1"
-   id="svg5"
-   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
-   sodipodi:docname="splashsceenISL.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview7"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="false"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="px"
-     showgrid="false"
-     showguides="true"
-     inkscape:zoom="0.871875"
-     inkscape:cx="-41.863799"
-     inkscape:cy="311.39785"
-     inkscape:window-width="1360"
-     inkscape:window-height="697"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1">
-    <sodipodi:guide
-       position="0,640"
-       orientation="0,360"
-       id="guide132"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="360,640"
-       orientation="640,0"
-       id="guide134"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="360,0"
-       orientation="0,-360"
-       id="guide136"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="0,0"
-       orientation="-640,0"
-       id="guide138"
-       inkscape:locked="false" />
-  </sodipodi:namedview>
-  <defs
-     id="defs2">
-    <linearGradient
-       inkscape:collect="always"
-       id="linearGradient10057">
-      <stop
-         style="stop-color:#ffffff;stop-opacity:1;"
-         offset="0"
-         id="stop10053" />
-      <stop
-         style="stop-color:#a12227;stop-opacity:1;"
-         offset="1"
-         id="stop10055" />
-    </linearGradient>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter8746"
-       x="-0.16458283"
-       y="-0.16458283"
-       width="1.3291657"
-       height="1.3291657">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="13.092516"
-         id="feGaussianBlur8748" />
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="502.28107px" height="502.28104px" viewBox="0 0 502.28107 502.28104" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB" id="filter_1">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+      <feMorphology radius="12" operator="dilate" in="SourceAlpha" result="effect0_dropShadow" />
+      <feOffset dx="0" dy="0" />
+      <feGaussianBlur stdDeviation="25" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.90588236 0 0 0 0 0.78039217 0 0 0 0 0.78431374 0 0 0 1 0" />
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect0_dropShadow" />
+      <feBlend mode="normal" in="SourceGraphic" in2="effect0_dropShadow" result="shape" />
     </filter>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient10057"
-       id="radialGradient10059"
-       cx="303.94794"
-       cy="48.614979"
-       fx="303.94794"
-       fy="48.614979"
-       r="76.367714"
-       gradientUnits="userSpaceOnUse" />
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter12051"
-       x="-0.010351677"
-       y="-0.014272673"
-       width="1.0207034"
-       height="1.0285453">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.36278215"
-         id="feGaussianBlur12053" />
+    <filter filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB" id="filter_2">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+      <feOffset dx="2" dy="2" />
+      <feGaussianBlur stdDeviation="2" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.39215687 0 0 0 0 0.39215687 0 0 0 0 0.39215687 0 0 0 0.78039217 0" />
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect0_dropShadow" />
+      <feBlend mode="normal" in="SourceGraphic" in2="effect0_dropShadow" result="shape" />
     </filter>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter15255"
-       x="-0.0016087894"
-       y="-0.022182162"
-       width="1.0032176"
-       height="1.0443643">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.18022689"
-         id="feGaussianBlur15257" />
-    </filter>
+    <path d="M149.998 5.3948e-06L299.997 149.998L149.998 299.997L0 149.998L149.998 5.3948e-06Z" id="path_1" />
   </defs>
-  <g
-     inkscape:label="Capa 1"
-     inkscape:groupmode="layer"
-     id="layer1">
-    <rect
-       style="opacity:1;fill:#a12227;fill-opacity:1;stroke-width:3.59055;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill;stroke:none"
-       id="rect6854"
-       width="360"
-       height="640"
-       x="0"
-       y="0" />
-    <rect
-       style="mix-blend-mode:normal;fill:#ecd3d4;fill-opacity:1;stroke-width:4.07175;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill;filter:url(#filter8746)"
-       id="rect8675"
-       width="190.9193"
-       height="190.9193"
-       x="208.4883"
-       y="-46.844669"
-       ry="0"
-       transform="matrix(0.70776518,0.71087923,-0.71087923,0.70776518,-0.56439305,-0.22029388)" />
-    <rect
-       style="fill:#a12227;fill-opacity:1;stroke-width:4.07175;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
-       id="rect192"
-       width="190.9193"
-       height="190.9193"
-       x="208.4883"
-       y="-46.844669"
-       ry="0"
-       transform="rotate(45.125769)" />
-    <rect
-       style="opacity:1;fill:url(#radialGradient10059);fill-opacity:1;stroke-width:3.2574;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
-       id="rect10051"
-       width="152.73543"
-       height="152.73543"
-       x="227.58023"
-       y="-27.752735"
-       ry="0"
-       transform="rotate(45.125769)" />
-    <rect
-       style="opacity:0.6;fill:#ffffff;fill-opacity:1;stroke-width:3.2574;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
-       id="rect1842"
-       width="152.73543"
-       height="152.73543"
-       x="227.58023"
-       y="-27.752735"
-       ry="0"
-       transform="rotate(45.125769)" />
-    <text
-       xml:space="preserve"
-       style="font-size:74.0571px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle;mix-blend-mode:normal;fill:#641518;fill-opacity:1;stroke-width:0.771429;filter:url(#filter12051)"
-       x="179.80626"
-       y="279.96732"
-       id="text12049"><tspan
-         sodipodi:role="line"
-         id="tspan12047"
-         x="179.80626"
-         y="279.96732"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:74.0571px;font-family:Impact;-inkscape-font-specification:'Impact, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#641518;fill-opacity:1;stroke-width:0.771429">ISL</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:74.0571px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle;fill:#a12227;fill-opacity:1;stroke-width:0.771429"
-       x="178.8067"
-       y="278.96744"
-       id="text5945"><tspan
-         sodipodi:role="line"
-         id="tspan5943"
-         x="178.8067"
-         y="278.96744"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:74.0571px;font-family:Impact;-inkscape-font-specification:'Impact, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a12227;fill-opacity:1;stroke-width:0.771429">ISL</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:21.3333px;line-height:1.25;font-family:'Exo 2';-inkscape-font-specification:'Exo 2, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#641518;fill-opacity:1;filter:url(#filter15255)"
-       x="180.91837"
-       y="621.21295"
-       id="text13517"><tspan
-         sodipodi:role="line"
-         id="tspan13515"
-         x="180.91837"
-         y="621.21295"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:21.3333px;font-family:'Exo 2';-inkscape-font-specification:'Exo 2, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#641518;fill-opacity:1">by RandA Media Lab, Group</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:21.3333px;line-height:1.25;font-family:'Exo 2';-inkscape-font-specification:'Exo 2, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1"
-       x="179.81868"
-       y="620.21271"
-       id="text6794"><tspan
-         sodipodi:role="line"
-         id="tspan6792"
-         x="179.81868"
-         y="620.21271"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:21.3333px;font-family:'Exo 2';-inkscape-font-specification:'Exo 2, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1">by RandA Media Lab, Group</tspan></text>
+  <g id="Logo" transform="translate(101.14215 101.142136)">
+    <g id="fondo" filter="url(#filter_1)">
+      <use xlink:href="#path_1" fill="none" stroke="#FFFFFF" stroke-opacity="0.2509804" stroke-width="20" stroke-linejoin="round" />
+      <use stroke="none" fill="#A12227" xlink:href="#path_1" fill-rule="evenodd" />
+    </g>
+    <path d="M155.792 24.5537L275.847 144.609Q275.986 144.748 276.118 144.894Q276.25 145.039 276.375 145.191Q276.499 145.343 276.616 145.501Q276.733 145.658 276.842 145.822Q276.951 145.985 277.052 146.153Q277.153 146.322 277.246 146.495Q277.338 146.668 277.422 146.845Q277.506 147.023 277.581 147.204Q277.656 147.386 277.723 147.571Q277.789 147.756 277.846 147.944Q277.903 148.131 277.95 148.322Q277.998 148.512 278.036 148.705Q278.075 148.898 278.104 149.092Q278.132 149.286 278.152 149.481Q278.171 149.677 278.181 149.873Q278.19 150.069 278.19 150.266Q278.19 150.462 278.181 150.658Q278.171 150.854 278.152 151.05Q278.132 151.245 278.104 151.439Q278.075 151.633 278.036 151.826Q277.998 152.019 277.95 152.209Q277.903 152.4 277.846 152.587Q277.789 152.775 277.723 152.96Q277.656 153.145 277.581 153.327Q277.506 153.508 277.422 153.686Q277.338 153.863 277.246 154.036Q277.153 154.209 277.052 154.378Q276.951 154.546 276.842 154.71Q276.733 154.873 276.616 155.031Q276.499 155.188 276.375 155.34Q276.25 155.492 276.118 155.637Q275.986 155.783 275.847 155.922L155.792 275.977Q155.653 276.116 155.507 276.248Q155.362 276.38 155.21 276.505Q155.058 276.629 154.901 276.746Q154.743 276.863 154.579 276.972Q154.416 277.081 154.248 277.182Q154.079 277.283 153.906 277.376Q153.733 277.468 153.556 277.552Q153.378 277.636 153.197 277.711Q153.015 277.786 152.83 277.853Q152.645 277.919 152.457 277.976Q152.27 278.033 152.079 278.081Q151.889 278.128 151.696 278.167Q151.503 278.205 151.309 278.234Q151.115 278.262 150.92 278.282Q150.724 278.301 150.528 278.311Q150.332 278.32 150.136 278.32Q149.939 278.32 149.743 278.311Q149.547 278.301 149.351 278.282Q149.156 278.262 148.962 278.234Q148.768 278.205 148.575 278.167Q148.382 278.128 148.192 278.081Q148.001 278.033 147.814 277.976Q147.626 277.919 147.441 277.853Q147.256 277.786 147.074 277.711Q146.893 277.636 146.715 277.552Q146.538 277.468 146.365 277.376Q146.192 277.283 146.023 277.182Q145.855 277.081 145.691 276.972Q145.528 276.863 145.371 276.746Q145.213 276.629 145.061 276.505Q144.909 276.38 144.764 276.248Q144.618 276.116 144.479 275.977L24.4236 155.922Q24.2848 155.783 24.1529 155.637Q24.021 155.492 23.8965 155.34Q23.7719 155.188 23.6549 155.031Q23.5379 154.873 23.4289 154.71Q23.3198 154.546 23.2188 154.378Q23.1179 154.209 23.0253 154.036Q22.9327 153.863 22.8488 153.686Q22.7648 153.508 22.6897 153.327Q22.6145 153.145 22.5484 152.96Q22.4822 152.775 22.4252 152.588Q22.3682 152.4 22.3205 152.209Q22.2728 152.019 22.2345 151.826Q22.1962 151.633 22.1674 151.439Q22.1385 151.245 22.1193 151.05Q22.1 150.854 22.0904 150.658Q22.0808 150.462 22.0808 150.266Q22.0808 150.069 22.0904 149.873Q22.1 149.677 22.1193 149.482Q22.1385 149.286 22.1674 149.092Q22.1962 148.898 22.2345 148.705Q22.2728 148.512 22.3205 148.322Q22.3682 148.131 22.4252 147.944Q22.4822 147.756 22.5484 147.571Q22.6145 147.386 22.6897 147.204Q22.7648 147.023 22.8488 146.846Q22.9327 146.668 23.0253 146.495Q23.1179 146.322 23.2188 146.153Q23.3198 145.985 23.4289 145.822Q23.538 145.658 23.6549 145.501Q23.7719 145.343 23.8965 145.191Q24.021 145.039 24.1529 144.894Q24.2848 144.748 24.4236 144.609L144.479 24.5537Q144.618 24.4148 144.764 24.2829Q144.909 24.1511 145.061 24.0265Q145.213 23.9019 145.371 23.785Q145.528 23.668 145.692 23.5589Q145.855 23.4498 146.023 23.3488Q146.192 23.2479 146.365 23.1553Q146.538 23.0628 146.715 22.9788Q146.893 22.8948 147.074 22.8197Q147.256 22.7446 147.441 22.6784Q147.626 22.6122 147.814 22.5552Q148.001 22.4982 148.192 22.4505Q148.382 22.4028 148.575 22.3645Q148.768 22.3262 148.962 22.2974Q149.156 22.2686 149.352 22.2493Q149.547 22.2301 149.743 22.2204Q149.939 22.2108 150.136 22.2108Q150.332 22.2108 150.528 22.2204Q150.724 22.2301 150.92 22.2493Q151.115 22.2686 151.309 22.2974Q151.503 22.3262 151.696 22.3645Q151.889 22.4028 152.079 22.4505Q152.27 22.4982 152.458 22.5552Q152.645 22.6122 152.83 22.6784Q153.015 22.7446 153.197 22.8197Q153.378 22.8948 153.556 22.9788Q153.733 23.0628 153.906 23.1553Q154.079 23.2479 154.248 23.3488Q154.416 23.4498 154.58 23.5589Q154.743 23.668 154.901 23.785Q155.058 23.9019 155.21 24.0265Q155.362 24.1511 155.507 24.2829Q155.653 24.4148 155.792 24.5537L155.792 24.5537Z" id="fondo2" fill="#FFFFFF" fill-opacity="0.8" fill-rule="evenodd" stroke="none" />
+    <g id="ISL" fill="#A12227" filter="url(#filter_2)" transform="translate(64.33795 89.44066)">
+      <path d="M84.8744 43.1704Q84.4653 39.0455 81.3459 36.7614Q78.2266 34.4773 72.9425 34.4773Q67.5221 34.4773 64.6244 36.6932Q61.7266 38.9091 61.7266 42.2841Q61.6584 46.0341 64.9482 47.9602Q68.238 49.8864 72.7721 50.9432L79.0448 52.4432Q85.113 53.8068 89.8346 56.3977Q94.5562 58.9886 97.2664 63.0625Q99.9766 67.1364 99.9766 72.9659Q99.9425 82.5455 92.8005 88.2216Q85.6584 93.8977 72.8744 93.8977Q60.1584 93.8977 52.5903 88.1023Q45.0221 82.3068 44.7493 70.9886L59.0334 70.9886Q59.4084 76.2386 63.1755 78.8807Q66.9425 81.5227 72.7039 81.5227Q78.3289 81.5227 81.6869 79.1364Q85.0448 76.75 85.0789 72.9318Q85.0448 69.3864 81.9766 67.4773Q78.9084 65.5682 73.2153 64.2045L65.613 62.2954Q56.7834 60.1818 51.6698 55.5795Q46.5562 50.9773 46.5903 43.2727Q46.5562 36.9318 49.9823 32.1761Q53.4084 27.4205 59.4084 24.7784Q65.4084 22.1364 73.0448 22.1364Q80.8175 22.1364 86.63 24.7954Q92.4425 27.4545 95.6812 32.1932Q98.9198 36.9318 99.0221 43.1704L84.8744 43.1704ZM34.8289 23.0909L34.8289 92.9091L20.0675 92.9091L20.0675 23.0909L34.8289 23.0909ZM109.863 23.0909L109.863 92.9091L154.556 92.9091L154.556 80.7386L124.624 80.7386L124.624 23.0909L109.863 23.0909Z" />
+    </g>
   </g>
 </svg>
