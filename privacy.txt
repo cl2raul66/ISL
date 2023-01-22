@@ -1,0 +1,20 @@
+Política de Privacidad de la aplicación Informe Samana de Labores (ISL)
+
+La privacidad de nuestros usuarios es importante para nosotros. En esta política de privacidad se explica qué información recopilamos y cómo la usamos.
+
+Información recopilada: Los datos de sus labores de la semana pasada serán enviados a un bot de Telegram, para tener una copia de estos con el fin de tener registro para almacenar en un futuro servidor.
+
+Información de cuenta: Al crear una cuenta en la aplicación, se recopilará información personal como nombre, correo electrónico y contraseña. Esta información se utilizará para crear y mantener su cuenta, así como para proteger su seguridad.
+Cómo usamos la información:
+
+Utilizamos la información de cuenta para permitirle acceder a los servicios de la aplicación y para ayudar a personalizar su experiencia.
+No compartimos ni vendemos la información personal de nuestros usuarios a terceros.
+La aplicación no contiene anuncios, juegos de azar, detección de ubicación o servicios basados en la ubicación, contenido generado por el usuario o comunicación entre usuarios.
+Seguridad:
+
+Tomamos medidas de seguridad para proteger la información personal de nuestros usuarios contra el acceso no autorizado, la modificación, la divulgación o la destrucción.
+La aplicación está dirigida a mayores de 12 años y no contiene temas inapropiados como violencia, violencia de dibujos animados, drogas, desnudez, sexo, intolerancia, lenguaje obsceno o académico.
+Cambios en la política de privacidad:
+
+Nos reservamos el derecho a modificar esta política de privacidad en cualquier momento. Si hacemos cambios significativos en la forma en que usamos su información personal, le notificaremos mediante una notificación en la aplicación o mediante un correo electrónico.
+Si tiene alguna pregunta o inquietud sobre nuestra política de privacidad, no dude en ponerse en contacto con nosotros.
